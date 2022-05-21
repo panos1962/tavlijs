@@ -1,40 +1,143 @@
 .tavlijsTavli {
 	position: relative;
 	display: inline-block;
-background-color: olive;
+}
+
+/******************************************************************************/
+
+.tavlijsThiki {
+	position: absolute;
+	display: inline-block;
+
+	width: 8%;
+	height: 50%;
+	background-color: yellow;
+}
+
+.tavlijsThiki0 {
+	bottom: 0px;
+	left: 0px;
+background-color: #d7d95e;
+}
+
+.tavlijsThiki1 {
+	top: 0px;
+	left: 0px;
+background-color: #548b56;
+}
+
+/******************************************************************************/
+
+.tavlijsExo {
+	position: absolute;
+	display: inline-block;
+
+	width: 8%;
+	height: 50%;
+	background-color: yellow;
+}
+
+.tavlijsExo0 {
+	bottom: 0px;
+	right: 0px;
+background-color: #af4545;
+}
+
+.tavlijsExo1 {
+	top: 0px;
+	right: 0px;
+background-color: #919ba7;
+}
+
+/******************************************************************************/
+
+.tavlijsZariaArea {
+	position: absolute;
+	bottom: 46%;
+
+	display: inline-block;
+	text-align: center;
+	vertical-align: middle;
+
+	width: 42%;
+	height: 8%;
+	background-color: #853D25;
+}
+
+.tavlijsZariaArea0 {
+	right: 8%;
+}
+
+.tavlijsZariaArea1 {
+	left: 8%;
+}
+
+.tavlijsZaria {
+	display: inline-block;
+	width: 90%;
+	height: 100%;
+	background-color: #F4DEB3;
+}
+
+/******************************************************************************/
+
+.tavlijsPerioxiArea {
+	position: absolute;
+	display: inline-block;
+	text-align: center;
+
+	width: 42%;
+	height: 46%;
+	background-color: #853D25;
+}
+
+.tavlijsPerioxiArea0 {
+	bottom: 0;
+	left: 8%;
+}
+
+.tavlijsPerioxiArea1 {
+	bottom: 0;
+	right: 8%;
+}
+
+.tavlijsPerioxiArea2 {
+	top: 0px;
+	right: 8%;
+	transform: rotate(180deg);
+}
+
+.tavlijsPerioxiArea3 {
+	top: 0px;
+	left: 8%;
+	transform: rotate(180deg);
 }
 
 .tavlijsPerioxi {
 	position: absolute;
+	bottom: 5%;
+	left: 5%;
 	display: inline-block;
-
-	width: 40%;
-	height: 50%;
+	width: 90%;
+	height: 95%;
 	background-color: #F4DEB3;
-
-	border-style: none solid solid solid;
-	border-width: 4%;
-	border-color: #853D25;
 }
 
-.tavlijsPerioxi0 {
-	bottom: 4%;
-	left: 10%;
+/******************************************************************************/
+
+.tavlijsThesi {
+	position: relative;
+	display: inline-block;
+	margin: 0px 0.33%;
+	width: 16%;
+	height: 100%;
+	vertical-align: bottom;
 }
 
-.tavlijsPerioxi1 {
-	bottom: 0px;
-	right: 0px;
-}
-
-.tavlijsPerioxi2 {
-	top: 0px;
-	right: 0px;
-	transform: rotate(180deg);
-}
-
-.tavlijsPerioxi3 {
-	top: 0px;
+.tavlijsThesiTrigono {
+	position: absolute;
 	left: 0px;
-	transform: rotate(180deg);
+	bottom: 0px;
+	width: 100%;
+	height: 100%;
 }
