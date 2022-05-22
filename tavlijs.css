@@ -2,6 +2,12 @@
 	font-size: 0px;
 	position: relative;
 	display: inline-block;
+/*
+border-style: solid;
+border-width: 1px;
+border-color: black;
+background-color: red;
+*/
 }
 
 /******************************************************************************/
@@ -169,19 +175,7 @@ background-color: yellow;
 .tavlijsPouliDana {
 	position: relative;
 	display: inline-block;
-	width: 70%;
-
-	border-style: solid;
-	border-width: 0px;
-	border-radius: 0px;
-}
-
-.tavlijsPouliDana0 {
-	background-color: #F5F5DC;
-	border-color: #003C00;
-}
-
-.tavlijsPouliDana1 {
-	background-color: #1D3025;
-	border-color: #325D1E;
+background-color: yellow;
+/*
+*/
 }
