@@ -54,7 +54,7 @@ t.thesi[i].pouliPush(new tavlijs.pouli(t, i % 2, 0));
 let n = 1;
 for (let i = 6; i < 21; i++) {
 	for (let j = 0; j < i - 5; j++)
-	t.thesi[i].pouliPush(new tavlijs.pouli(t, 0, i));
+	t.thesi[i].pouliPush(new tavlijs.pouli(t, i % 2, i));
 }
 		t.domGet().appendTo(bodyDOM);
 	});

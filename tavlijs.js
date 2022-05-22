@@ -337,7 +337,9 @@ tavlijs.thesi.prototype.domCreate = function() {
 	else if (count > 12) { dh2 = dh1 / 3; orio = 2; }
 	else if (count > 10) { dh2 = dh1 / 2.65; orio = 2; }
 	else if (count > 9) { dh2 = dh1 / 2.2; orio = 2; }
-	else if (count > 6) { dh2 = dh1 / 2.15; orio = 3; }
+	else if (count > 9) { dh2 = dh1 / 2.2; orio = 2; }
+	else if (count > 7) { dh2 = dh1 / 2.2; orio = 3; }
+	else if (count > 6) { dh2 = dh1 / 2.15; orio = 4; }
 
 	let n = 0;
 	this.pouliWalk(function(pouli) {
