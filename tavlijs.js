@@ -44,6 +44,16 @@ tavlijs.pouliPerigramaXroma = [
 	'#325D1E'	// χρώμα περιγράμματος πουλιών παίκτη 1
 ];
 
+tavlijs.pouliSkiaMesaXroma = [
+	'yellow',		// χρώμα πουλιών παίκτη 0
+	'yellow'	// χρώμα πουλιών παίκτη 1
+];
+
+tavlijs.pouliSkiaExoXroma = [
+	'grey',	// χρώμα περιγράμματος πουλιών παίκτη 0
+	'black'		// χρώμα περιγράμματος πουλιών παίκτη 1
+];
+
 ///////////////////////////////////////////////////////////////////////////////@
 
 // Ακολουθούν οι προδιαγραφές που καθορίζουν τα αντικείμενα τύπου "tavli" που
@@ -418,15 +428,20 @@ tavlijs.pouli.prototype.domCreate = function() {
 
 	let cx = w / 2;
 	let cy = w / 2;
-	let r = (w / 2) * 0.80;
+	let r = (w / 2) * 0.78;
 
 	ctx.beginPath();
 	ctx.arc(cx, cy, r, 0, 2 * Math.PI);
 
+
+	ctx.shadowBlur = w * 0.02;
+	ctx.shadowColor = tavlijs.pouliSkiaExoXroma[this.pektis];
 	ctx.lineWidth = w * 0.190;
 	ctx.strokeStyle = tavlijs.pouliPerigramaXroma[this.pektis];
 	ctx.stroke();
 
+	ctx.shadowBlur = w * 0.02;
+	ctx.shadowColor = tavlijs.pouliSkiaMesaXroma[this.pektis];
 	ctx.fillStyle = tavlijs.pouliMesaXroma[this.pektis];
 	ctx.fill();
 
@@ -468,10 +483,14 @@ tavlijs.pouli.prototype.domCreate = function() {
 	ctx.quadraticCurveTo(dw + lw, dh + lw, r + dw + lw, dh + lw);
 	ctx.closePath();
 
+	ctx.shadowBlur = w * 0.02;
+	ctx.shadowColor = tavlijs.pouliSkiaExoXroma[this.pektis];
 	ctx.lineWidth = lw * 2;
 	ctx.strokeStyle = tavlijs.pouliPerigramaXroma[this.pektis];
 	ctx.stroke();
 
+	ctx.shadowBlur = w * 0.02;
+	ctx.shadowColor = tavlijs.pouliSkiaMesaXroma[this.pektis];
 	ctx.fillStyle = tavlijs.pouliMesaXroma[this.pektis];
 	ctx.fill();
 
