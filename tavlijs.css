@@ -104,8 +104,8 @@ background-color: #919ba7;
 
 	width: 38%;
 	height: 6%;
-background-color: cornsilk;
 /*
+background-color: cornsilk;
 */
 }
 
@@ -162,20 +162,22 @@ background-color: yellow;
 	height: 100%;
 }
 
-.tavlijsThesiTrigono {
-	position: absolute;
-	left: 0px;
-	bottom: 0px;
-	width: 100%;
-	height: 100%;
-}
-
 /******************************************************************************/
+
+.tavlijsPouli {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	display: inline-block;
+/*
+background-color: yellow;
+*/
+}
 
 .tavlijsPouliDana {
 	position: relative;
 	display: inline-block;
-background-color: yellow;
 /*
+background-color: yellow;
 */
 }

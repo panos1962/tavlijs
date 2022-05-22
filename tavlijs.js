@@ -26,7 +26,7 @@ tavlijs.thesiXroma = [
 	'#CD853E'	// 1, 3, 5,... 23
 ];
 
-tavlijs.pouliPlatosAnalogia = 0.068;
+tavlijs.pouliPlatosAnalogia = 0.062;
 tavlijs.pouliIpsosAnalogia = 0.38;
 
 tavlijs.pouliMesaXroma = [
@@ -93,7 +93,7 @@ tavlijs.tavli = function(props) {
 	this.thesi = [];
 
 	for (i = 0; i < 24; i++)
-	this.thesi[i] = new tavlijs.thesi(i);
+	this.thesi[i] = new tavlijs.thesi(this, i);
 };
 
 tavlijs.tavli.prototype.domCreate = function() {
@@ -136,73 +136,6 @@ tavlijs.tavli.prototype.domGet = function() {
 	this.domCreate();
 
 	return this.dom;
-};
-
-tavlijs.tavli.prototype.apikonisi = function() {
-	let tavli = this;
-	let dom = this.domGet();
-
-	dom.find('.tavlijsThesi').each(function() {
-		let id = $(this).data('id');
-
-		let dom = $('<canvas>').
-		addClass('tavlijsThesiTrigono').
-		appendTo($(this));
-
-		let w = dom.width();
-		let h = dom.height();
-
-		dom.
-		attr({
-			'width': w,
-			'height': h
-		});
-
-		let ctx = dom[0].getContext('2d');
-
-		ctx.beginPath();
-		ctx.moveTo(0, h);
-		ctx.lineTo(w / 2, h * 0.03);
-		ctx.lineTo(w, h);
-		ctx.closePath();
-
-		ctx.fillStyle = tavlijs.thesiXroma[id % 2];
-		ctx.fill();
-	});
-
-/*
-	dom.find('.tavlijsPouliDana').each(function() {
-		let w = $(this).width();
-		let css = {
-			'height': w * 0.2,
-			'border-width': w * 0.07,
-			'border-radius': w * 0.1,
-			'margin-top': w * 0.05,
-		};
-
-		if (tavli.platos < 400) {
-			css['margin-top'] = 0;
-		}
-
-		if (tavli.platos < 200) {
-			css['border-width'] *= 0.5;
-			css['border-radius'] = 0;
-			css['height'] *= 0.8;
-		}
-
-		if (tavli.platos < 100) {
-			css['height'] = 0.0001;
-			css['border-width'] = 0.00001;
-		}
-
-		for (let i in css)
-		css[i] = css[i] + 'px';
-
-		$(this).css(css);
-	});
-*/
-
-	return this;
 };
 
 ///////////////////////////////////////////////////////////////////////////////@
@@ -283,7 +216,7 @@ tavlijs.thiki.prototype.domCreate = function() {
 	addClass('tavlijsThiki' + this.pektis);
 
 	this.pouliWalk(function(pouli) {
-		pouli.domDanaGet().appendTo(thiki.dom);
+		pouli.danaDomGet().appendTo(thiki.dom);
 	});
 
 	return this;
@@ -324,7 +257,7 @@ tavlijs.exo.prototype.domCreate = function() {
 	addClass('tavlijsExo' + this.pektis);
 
 	this.pouliWalk(function(pouli) {
-		pouli.domDanaGet().appendTo(exo.dom);
+		pouli.danaDomGet().appendTo(exo.dom);
 	});
 
 	return this;
@@ -339,7 +272,8 @@ tavlijs.exo.prototype.domGet = function() {
 
 ///////////////////////////////////////////////////////////////////////////////@
 
-tavlijs.thesi = function(id) {
+tavlijs.thesi = function(tavli, id) {
+	this.tavli = tavli;
 	this.id = id;
 	this.dana = new tavlijs.dana();
 };
@@ -356,9 +290,53 @@ tavlijs.thesi.prototype.pouliPush = function(pouli) {
 };
 
 tavlijs.thesi.prototype.domCreate = function() {
+	let thesi = this;
+
 	this.dom = $('<div>').
 	data('id', this.id).
 	addClass('tavlijsThesi');
+
+	let w = this.tavli.platos * 0.062;
+	let h = this.tavli.platos * 0.397;
+
+	let canvasDom = $('<canvas>').
+	attr({
+		'width': w,
+		'height': h
+	}).
+	appendTo(this.dom);
+
+	let ctx = canvasDom[0].getContext('2d');
+
+	ctx.beginPath();
+	ctx.moveTo(0, h);
+	ctx.lineTo(w / 2, h * 0.03);
+	ctx.lineTo(w, h);
+	ctx.closePath();
+
+	ctx.fillStyle = tavlijs.thesiXroma[this.id % 2];
+	ctx.fill();
+
+	let b = 0;
+	let dh1 = this.tavli.platos * 0.0619
+
+	let orio = 15;
+	let dh2 = dh1;
+	let count = this.dana.countGet();
+
+	if (count > 15) { dh2 = dh1 / 6; orio = 3; }
+	else if (count > 13) { dh2 = dh1 / 3.5; orio = 2; }
+	else if (count > 12) { dh2 = dh1 / 3; orio = 2; }
+	else if (count > 10) { dh2 = dh1 / 2.65; orio = 2; }
+	else if (count > 9) { dh2 = dh1 / 2.2; orio = 2; }
+	else if (count > 6) { dh2 = dh1 / 2.15; orio = 3; }
+
+	let n = 0;
+	this.pouliWalk(function(pouli) {
+		thesi.dom.append(pouli.domGet().css('bottom', b + 'px'));
+		n++;
+		b += (n > orio ? dh2 : dh1)
+	});
 
 	return this;
 };
@@ -418,22 +396,26 @@ tavlijs.pouli = function(tavli, pektis, id) {
 };
 
 tavlijs.pouli.prototype.domCreate = function() {
-	let w = this.tavli.platos * tavlijs.pouliPlatosAnalogia;
-	let h = w * tavlijs.pouliIpsosAnalogia;
+	let w = this.tavli.platos * tavlijs.pouliPlatosAnalogia * 1.014;
 
 	let canvasDom = $('<canvas>').
 	attr({
 		'width': w,
-		'height': h
+		'height': w
 	});
 
 	let ctx = canvasDom[0].getContext('2d');
 
+	let cx = w / 2;
+	let cy = w / 2;
+	let r = (w / 2) * 0.80;
+
 	ctx.beginPath();
-	ctx.moveTo(0, 0);
-	ctx.lineTo(w, 0);
-	ctx.lineTo(w, h);
-	ctx.closePath();
+	ctx.arc(cx, cy, r, 0, 2 * Math.PI);
+
+	ctx.lineWidth = w * 0.190;
+	ctx.strokeStyle = tavlijs.pouliPerigramaXroma[this.pektis];
+	ctx.stroke();
 
 	ctx.fillStyle = tavlijs.pouliMesaXroma[this.pektis];
 	ctx.fill();
@@ -446,13 +428,18 @@ tavlijs.pouli.prototype.domCreate = function() {
 	addClass('tavlijsPouli' + this.pektis).
 	append(canvasDom);
 
+	///////////////////////////////////////////////////////////////////////@
+
+	w = this.tavli.platos * tavlijs.pouliPlatosAnalogia;
+	let h = w * tavlijs.pouliIpsosAnalogia;
+
 	canvasDom = $('<canvas>').
 	attr({
 		'width': w,
 		'height': h
 	});
 
-	let r = h * 0.1;
+	r = h * 0.1;
 	let dh = h * 0.05;
 	let dw = w * 0.03;
 	let lw = h * 0.15;
@@ -478,7 +465,7 @@ tavlijs.pouli.prototype.domCreate = function() {
 	ctx.fillStyle = tavlijs.pouliMesaXroma[this.pektis];
 	ctx.fill();
 
-	this.domDana = $('<div>').
+	this.danaDom = $('<div>').
 	data('tavli', this.tavli).
 	data('pektis', this.pektis).
 	data('id', this.id).
@@ -496,18 +483,11 @@ tavlijs.pouli.prototype.domGet = function() {
 	return this.dom;
 };
 
-tavlijs.pouli.prototype.domDanaGet = function() {
-	if (!this.hasOwnProperty('domDana'))
+tavlijs.pouli.prototype.danaDomGet = function() {
+	if (!this.hasOwnProperty('danaDom'))
 	this.domCreate();
 
-	let dom = this.domDana;
-
-	dom.
-	removeClass().
-	addClass('tavlijsPouliDana').
-	addClass('tavlijsPouliDana' + this.pektis);
-
-	return dom;
+	return this.danaDom;
 };
 
 ///////////////////////////////////////////////////////////////////////////////@
