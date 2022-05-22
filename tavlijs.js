@@ -48,7 +48,7 @@ tavlijs.pouliPerigramaXroma = [
 
 // Ακολουθούν οι προδιαγραφές που καθορίζουν τα αντικείμενα τύπου "tavli" που
 // περιλαμβάνουν τις πλαϊνές ντάνες, το ταμπλό αυτό καθαυτό, τις 24 θέσεις του
-// ταμπλό και τα πούλια.
+// ταμπλό, τα πούλια και τα ζάρια.
 
 tavlijs.tavli = function(props) {
 	let i;
@@ -99,6 +99,9 @@ tavlijs.tavli = function(props) {
 
 	for (i = 0; i < 24; i++)
 	this.thesi[i] = new tavlijs.thesi(this, i);
+
+	if (!this.hasOwnProperty('zari'))
+	this.zari = [];
 };
 
 tavlijs.tavli.prototype.domCreate = function() {
@@ -301,8 +304,8 @@ tavlijs.thesi.prototype.domCreate = function() {
 	data('id', this.id).
 	addClass('tavlijsThesi');
 
-	let w = this.tavli.platos * 0.062;
-	let h = this.tavli.platos * 0.397;
+	let w = this.tavli.platos * 0.0625;
+	let h = this.tavli.platos * 0.3975;
 
 	let canvasDom = $('<canvas>').
 	attr({
@@ -322,7 +325,7 @@ tavlijs.thesi.prototype.domCreate = function() {
 	ctx.fillStyle = tavlijs.thesiXroma[this.id % 2];
 	ctx.fill();
 
-	let b = 0;
+	let b = this.tavli.platos * 0.0005
 	let dh1 = this.tavli.platos * 0.0619
 
 	let orio = 15;
