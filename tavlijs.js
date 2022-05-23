@@ -10,37 +10,6 @@ var tavlijs = {};
 
 tavlijs.platosDefault = 100;
 
-// Το συνολικό ύψος του ταμπλό προκύπτει κατ' αναλογίαν από το πλάτος. Με άλλα
-// λόγια η αναλογία ύψους/πλάτους είναι σταθερή και καθορίζεται από την τιμή
-// της σταθεράς "ipsosAnalogia".
-
-tavlijs.ipsosAnalogia = 0.9;
-
-// Ακολουθούν τα χρώματα που παίρνουν εναλλάξ οι θέσεις στο ταμπλό. Θυμίζουμε
-// ότι οι 24 θέσεις αριθμούνται από 0 έως 23, εκκινούν από τη θέση 0 κάτω
-// αριστερά και καταλήγουν στη θέση 23 επάνω αριστερά, ακολουθώντας κυκλική
-// τροχιά με φορά αντίστροφη από αυτήν των δεικτών του ωρολογίου.
-
-tavlijs.thesiXroma = [
-	'#D2B48C',	// 0, 2, 4,... 22
-	'#CD853E'	// 1, 3, 5,... 23
-];
-
-// Ακολουθούν δευτερεύουσες σταθερές που χρησιμοποιούνται κυρίως κατά τον
-// σχεδιασμό των πουλιών. Οι αναλογίες αφορούν στο μέγεθος των πουλιών και
-// υπολογίζονται με βάση το συνολικό πλάτος τού ταμπλό, ενώ τα χρώματα είναι
-// σταθερά.
-
-tavlijs.pouliMesaXroma = [
-	'#F5F5DC',	// χρώμα πουλιών παίκτη 0
-	'#264030',	// χρώμα πουλιών παίκτη 1
-];
-
-tavlijs.pouliPerigramaXroma = [
-	'#996633',	// χρώμα περιγράμματος πουλιών παίκτη 0
-	'#003300',	// χρώμα περιγράμματος πουλιών παίκτη 1
-];
-
 ///////////////////////////////////////////////////////////////////////////////@
 
 // Ακολουθούν οι προδιαγραφές που καθορίζουν τα αντικείμενα τύπου "tavli" που
@@ -106,7 +75,7 @@ tavlijs.tavli.prototype.domCreate = function() {
 	addClass('tavlijsTavli').
 	css({
 		"width": this.platos + 'px',
-		"height": (this.platos * tavlijs.ipsosAnalogia) + 'px'
+		"height": (this.platos * 0.9) + 'px'
 	});
 
 	for (let i = 0; i < 2; i++)
@@ -116,11 +85,13 @@ tavlijs.tavli.prototype.domCreate = function() {
 	this.exo[i].domGet().appendTo(this.dom);
 
 	let misoDom = [];
+	let ws = this.platos * 0.003;
 
 	for (let i = 0; i < 2; i++)
 	$('<div>').
 	addClass('tavlijsMisoArea').
 	addClass('tavlijsMisoArea' + i).
+	css('box-shadow', ws + 'px ' + ws + 'px ' + (2 * ws) + 'px #4e4629').
 	append(misoDom[i] = $('<div>').
 	addClass('tavlijsMiso')).
 	appendTo(this.dom);
@@ -299,7 +270,8 @@ tavlijs.thesi.prototype.domCreate = function() {
 
 	this.dom = $('<div>').
 	data('id', this.id).
-	addClass('tavlijsThesi');
+	addClass('tavlijsThesi').
+	css('width', (this.tavli.platos * 0.0640) + 'px');
 
 	let w = this.tavli.platos * 0.0625;
 	let h = this.tavli.platos * 0.3975;
@@ -309,17 +281,17 @@ tavlijs.thesi.prototype.domCreate = function() {
 	'points="0,' + h + ' ' + (w / 2) + ',0' + ' ' + w + ',' + h + '"/>').
 	appendTo(this.dom);
 
-	let b = this.tavli.platos * 0.0005
-	let dh1 = this.tavli.platos * 0.0619
+	let b = this.tavli.platos * 0.0005;
+	let dh1 = this.tavli.platos * 0.0635;
 
 	let orio = 15;
 	let dh2 = dh1;
 	let count = this.dana.countGet();
 
 	if (count > 15) { dh2 = dh1 / 6; orio = 3; }
-	else if (count > 13) { dh2 = dh1 / 3.5; orio = 2; }
-	else if (count > 12) { dh2 = dh1 / 3; orio = 2; }
-	else if (count > 10) { dh2 = dh1 / 2.65; orio = 2; }
+	else if (count > 13) { dh2 = dh1 / 3.72; orio = 2; }
+	else if (count > 12) { dh2 = dh1 / 3.3; orio = 2; }
+	else if (count > 10) { dh2 = dh1 / 2.82; orio = 2; }
 	else if (count > 9) { dh2 = dh1 / 2.2; orio = 2; }
 	else if (count > 8) { dh2 = dh1 / 2.0; orio = 2; }
 	else if (count > 7) { dh2 = dh1 / 1.9; orio = 3; }
@@ -390,10 +362,10 @@ tavlijs.pouli = function(tavli, pektis, id) {
 };
 
 tavlijs.pouli.prototype.domCreate = function() {
-	let w = this.tavli.platos * 0.063;
+	let w = this.tavli.platos * 0.064;
 	let r = w / 2;
-	let rexo = r * 0.98;
-	let rmesi = r * 0.97;
+	let rexo = r * 0.985;
+	let rmesi = r * 0.96;
 	let reso = r * 0.85;
 
 	let svgDom = $('<svg width="' + w + '" height="' + w + '">' +
@@ -419,7 +391,7 @@ tavlijs.pouli.prototype.domCreate = function() {
 	let wexo = w * 0.99;
 	let hexo = h * 0.9;
 
-	let weso = wexo * 0.90;
+	let weso = wexo * 0.93;
 	let heso = hexo * 0.75;
 
 	let dw = (wexo - weso) / 2;

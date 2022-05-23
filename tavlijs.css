@@ -1,7 +1,8 @@
 .tavlijsTavli {
-	font-size: 0px;
 	position: relative;
 	display: inline-block;
+	margin: 0.2%;
+	font-size: 0px;
 /*
 border-style: solid;
 border-width: 1px;
@@ -122,6 +123,8 @@ background-color: cornsilk;
 .tavlijsPerioxi {
 	position: absolute;
 	display: inline-block;
+	text-align: center;
+	overflow: hidden;
 
 	width: 100%;
 	height: 46%;
@@ -158,8 +161,6 @@ background-color: yellow;
 	position: relative;
 	display: inline-block;
 	text-align: center;
-	margin: 0px 0.33%;
-	width: 16%;
 	height: 100%;
 /*
 background-color: red;
@@ -180,10 +181,13 @@ background-color: red;
 	position: absolute;
 	bottom: 0;
 	left: 0;
+/*
+background-color: cyan;
+*/
 }
 
 .tavlijsPouliExo0 {
-	fill: #cfae6c;
+	fill: #6c5d3e;
 }
 
 .tavlijsPouliExo1 {
@@ -219,7 +223,7 @@ background-color: yellow;
 }
 
 .tavlijsPouliDanaExo1 {
-	fill: #264030;
+	fill: #072e16;
 }
 
 .tavlijsPouliDanaEso0 {
