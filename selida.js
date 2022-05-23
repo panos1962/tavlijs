@@ -18,8 +18,8 @@ $(function() {
 450,
 */
 /*
-500,
 */
+500,
 700,
 /*
 2000,
@@ -55,6 +55,11 @@ let n = 1;
 for (let i = 6; i < 21; i++) {
 	for (let j = 0; j < i - 5; j++)
 	t.thesi[i].pouliPush(new tavlijs.pouli(t, i % 2, i));
+
+	t.zari = [
+		new tavlijs.zari(5),
+		new tavlijs.zari(3),
+	];
 }
 		t.domGet().appendTo(bodyDOM);
 	});
