@@ -36,22 +36,12 @@ tavlijs.pouliIpsosAnalogia = 0.38;
 
 tavlijs.pouliMesaXroma = [
 	'#F5F5DC',	// χρώμα πουλιών παίκτη 0
-	'#1D3025'	// χρώμα πουλιών παίκτη 1
+	'#264030',	// χρώμα πουλιών παίκτη 1
 ];
 
 tavlijs.pouliPerigramaXroma = [
-	'#003C00',	// χρώμα περιγράμματος πουλιών παίκτη 0
-	'#325D1E'	// χρώμα περιγράμματος πουλιών παίκτη 1
-];
-
-tavlijs.pouliSkiaMesaXroma = [
-	'yellow',		// χρώμα πουλιών παίκτη 0
-	'yellow'	// χρώμα πουλιών παίκτη 1
-];
-
-tavlijs.pouliSkiaExoXroma = [
-	'grey',	// χρώμα περιγράμματος πουλιών παίκτη 0
-	'black'		// χρώμα περιγράμματος πουλιών παίκτη 1
+	'#996633',	// χρώμα περιγράμματος πουλιών παίκτη 0
+	'#003300',	// χρώμα περιγράμματος πουλιών παίκτη 1
 ];
 
 ///////////////////////////////////////////////////////////////////////////////@
@@ -347,8 +337,8 @@ tavlijs.thesi.prototype.domCreate = function() {
 	else if (count > 12) { dh2 = dh1 / 3; orio = 2; }
 	else if (count > 10) { dh2 = dh1 / 2.65; orio = 2; }
 	else if (count > 9) { dh2 = dh1 / 2.2; orio = 2; }
-	else if (count > 9) { dh2 = dh1 / 2.2; orio = 2; }
-	else if (count > 7) { dh2 = dh1 / 2.2; orio = 3; }
+	else if (count > 8) { dh2 = dh1 / 2.0; orio = 2; }
+	else if (count > 7) { dh2 = dh1 / 1.9; orio = 3; }
 	else if (count > 6) { dh2 = dh1 / 2.15; orio = 4; }
 
 	let n = 0;
@@ -428,20 +418,18 @@ tavlijs.pouli.prototype.domCreate = function() {
 
 	let cx = w / 2;
 	let cy = w / 2;
-	let r = (w / 2) * 0.78;
+	let r = (w / 2) * 0.99;
+	let lw = w * 0.045;
+
+	r -= lw;
 
 	ctx.beginPath();
 	ctx.arc(cx, cy, r, 0, 2 * Math.PI);
 
-
-	ctx.shadowBlur = w * 0.02;
-	ctx.shadowColor = tavlijs.pouliSkiaExoXroma[this.pektis];
-	ctx.lineWidth = w * 0.190;
+	ctx.lineWidth = 2 * lw;
 	ctx.strokeStyle = tavlijs.pouliPerigramaXroma[this.pektis];
 	ctx.stroke();
 
-	ctx.shadowBlur = w * 0.02;
-	ctx.shadowColor = tavlijs.pouliSkiaMesaXroma[this.pektis];
 	ctx.fillStyle = tavlijs.pouliMesaXroma[this.pektis];
 	ctx.fill();
 
@@ -467,7 +455,7 @@ tavlijs.pouli.prototype.domCreate = function() {
 	r = h * 0.1;
 	let dh = h * 0.05;
 	let dw = w * 0.03;
-	let lw = h * 0.15;
+	lw = h * 0.15;
 
 	ctx = canvasDom[0].getContext('2d');
 
@@ -483,14 +471,10 @@ tavlijs.pouli.prototype.domCreate = function() {
 	ctx.quadraticCurveTo(dw + lw, dh + lw, r + dw + lw, dh + lw);
 	ctx.closePath();
 
-	ctx.shadowBlur = w * 0.02;
-	ctx.shadowColor = tavlijs.pouliSkiaExoXroma[this.pektis];
 	ctx.lineWidth = lw * 2;
 	ctx.strokeStyle = tavlijs.pouliPerigramaXroma[this.pektis];
 	ctx.stroke();
 
-	ctx.shadowBlur = w * 0.02;
-	ctx.shadowColor = tavlijs.pouliSkiaMesaXroma[this.pektis];
 	ctx.fillStyle = tavlijs.pouliMesaXroma[this.pektis];
 	ctx.fill();
 
