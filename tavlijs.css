@@ -157,6 +157,7 @@ background-color: yellow;
 .tavlijsThesi {
 	position: relative;
 	display: inline-block;
+	text-align: center;
 	margin: 0px 0.33%;
 	width: 16%;
 	height: 100%;
@@ -165,16 +166,44 @@ background-color: red;
 */
 }
 
+.tavlijsThesiTrigono0 {
+	fill: #D2B48C;
+}
+
+.tavlijsThesiTrigono1 {
+	fill: #CD853E;
+}
+
 /******************************************************************************/
 
 .tavlijsPouli {
 	position: absolute;
 	bottom: 0;
 	left: 0;
-	display: inline-block;
-/*
-background-color: yellow;
-*/
+}
+
+.tavlijsPouliExo0 {
+	fill: #cfae6c;
+}
+
+.tavlijsPouliExo1 {
+	fill: #7c7856;
+}
+
+.tavlijsPouliMesi0 {
+	fill: #996633;
+}
+
+.tavlijsPouliMesi1 {
+	fill: #003300;
+}
+
+.tavlijsPouliEso0 {
+	fill: #F5F5DC;
+}
+
+.tavlijsPouliEso1 {
+	fill: #264030;
 }
 
 .tavlijsPouliDana {
@@ -183,4 +212,20 @@ background-color: yellow;
 /*
 background-color: yellow;
 */
+}
+
+.tavlijsPouliDanaExo0 {
+	fill: #7c7856;
+}
+
+.tavlijsPouliDanaExo1 {
+	fill: #264030;
+}
+
+.tavlijsPouliDanaEso0 {
+	fill: #F5F5DC;
+}
+
+.tavlijsPouliDanaEso1 {
+	fill: #264030;
 }

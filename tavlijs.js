@@ -31,9 +31,6 @@ tavlijs.thesiXroma = [
 // υπολογίζονται με βάση το συνολικό πλάτος τού ταμπλό, ενώ τα χρώματα είναι
 // σταθερά.
 
-tavlijs.pouliPlatosAnalogia = 0.062;
-tavlijs.pouliIpsosAnalogia = 0.38;
-
 tavlijs.pouliMesaXroma = [
 	'#F5F5DC',	// χρώμα πουλιών παίκτη 0
 	'#264030',	// χρώμα πουλιών παίκτη 1
@@ -307,23 +304,10 @@ tavlijs.thesi.prototype.domCreate = function() {
 	let w = this.tavli.platos * 0.0625;
 	let h = this.tavli.platos * 0.3975;
 
-	let canvasDom = $('<canvas>').
-	attr({
-		'width': w,
-		'height': h
-	}).
+	$('<svg width="' + w + '" height="' + h + '">' +
+	'<polygon class="tavlijsThesiTrigono' + (this.id % 2) + '" ' +
+	'points="0,' + h + ' ' + (w / 2) + ',0' + ' ' + w + ',' + h + '"/>').
 	appendTo(this.dom);
-
-	let ctx = canvasDom[0].getContext('2d');
-
-	ctx.beginPath();
-	ctx.moveTo(0, h);
-	ctx.lineTo(w / 2, h * 0.03);
-	ctx.lineTo(w, h);
-	ctx.closePath();
-
-	ctx.fillStyle = tavlijs.thesiXroma[this.id % 2];
-	ctx.fill();
 
 	let b = this.tavli.platos * 0.0005
 	let dh1 = this.tavli.platos * 0.0619
@@ -406,85 +390,59 @@ tavlijs.pouli = function(tavli, pektis, id) {
 };
 
 tavlijs.pouli.prototype.domCreate = function() {
-	let w = this.tavli.platos * tavlijs.pouliPlatosAnalogia * 1.014;
+	let w = this.tavli.platos * 0.063;
+	let r = w / 2;
+	let rexo = r * 0.98;
+	let rmesi = r * 0.97;
+	let reso = r * 0.85;
 
-	let canvasDom = $('<canvas>').
-	attr({
-		'width': w,
-		'height': w
-	});
-
-	let ctx = canvasDom[0].getContext('2d');
-
-	let cx = w / 2;
-	let cy = w / 2;
-	let r = (w / 2) * 0.99;
-	let lw = w * 0.045;
-
-	r -= lw;
-
-	ctx.beginPath();
-	ctx.arc(cx, cy, r, 0, 2 * Math.PI);
-
-	ctx.lineWidth = 2 * lw;
-	ctx.strokeStyle = tavlijs.pouliPerigramaXroma[this.pektis];
-	ctx.stroke();
-
-	ctx.fillStyle = tavlijs.pouliMesaXroma[this.pektis];
-	ctx.fill();
+	let svgDom = $('<svg width="' + w + '" height="' + w + '">' +
+	'<circle class="tavlijsPouliExo' + this.pektis + '" ' +
+	'cx="' + r + '" cy="' + r + '" ' + 'r="' + rexo + '" />' +
+	'<circle class="tavlijsPouliMesi' + this.pektis + '" ' +
+	'cx="' + r + '" cy="' + r + '" ' + 'r="' + rmesi + '" />' +
+	'<circle class="tavlijsPouliEso' + this.pektis + '" ' +
+	'cx="' + r + '" cy="' + r + '" ' + 'r="' + reso + '" />');
 
 	this.dom = $('<div>').
 	data('tavli', this.tavli).
 	data('pektis', this.pektis).
 	data('id', this.id).
 	addClass('tavlijsPouli').
-	addClass('tavlijsPouli' + this.pektis).
-	append(canvasDom);
+	append(svgDom);
 
 	///////////////////////////////////////////////////////////////////////@
 
-	w = this.tavli.platos * tavlijs.pouliPlatosAnalogia;
-	let h = w * tavlijs.pouliIpsosAnalogia;
+	w = this.tavli.platos * 0.062;
+	let h = w * 0.32;
 
-	canvasDom = $('<canvas>').
-	attr({
-		'width': w,
-		'height': h
-	});
+	let wexo = w * 0.99;
+	let hexo = h * 0.9;
 
-	r = h * 0.1;
-	let dh = h * 0.05;
-	let dw = w * 0.03;
-	lw = h * 0.15;
+	let weso = wexo * 0.90;
+	let heso = hexo * 0.75;
 
-	ctx = canvasDom[0].getContext('2d');
+	let dw = (wexo - weso) / 2;
+	let dh = (hexo - heso) / 2;
 
-	ctx.beginPath();
-	ctx.moveTo(r + dw + lw, dh + lw);
-	ctx.lineTo(w - r - dw - lw, dh + lw);
-	ctx.quadraticCurveTo(w - dw - lw, dh + lw, w - dw - lw, dh + r + lw);
-	ctx.lineTo(w - dw - lw, h - dh - r - lw);
-	ctx.quadraticCurveTo(w - dw - lw, h - dh - lw, w - r - dw - lw, h - dh - lw);
-	ctx.lineTo(r + dw + lw, h - dh - lw);
-	ctx.quadraticCurveTo(dw + lw, h - dh - lw, dw + lw, h - r - dh - lw);
-	ctx.lineTo(dw + lw, dh + r + lw);
-	ctx.quadraticCurveTo(dw + lw, dh + lw, r + dw + lw, dh + lw);
-	ctx.closePath();
+	rexo = hexo * 0.2;
+	reso = heso * 0.10;
 
-	ctx.lineWidth = lw * 2;
-	ctx.strokeStyle = tavlijs.pouliPerigramaXroma[this.pektis];
-	ctx.stroke();
-
-	ctx.fillStyle = tavlijs.pouliMesaXroma[this.pektis];
-	ctx.fill();
+	svgDom = $('<svg width="' + w + '" height="' + h + '">' +
+	'<rect class="tavlijsPouliDanaExo' + this.pektis + '" ' +
+	'x="0" y="0" rx="' + rexo + '" ry="' + rexo + '" ' +
+	'width="' + wexo + '" height="' + hexo + '" />' +
+	'<rect class="tavlijsPouliDanaEso' + this.pektis + '" ' +
+	'x="' + dw + '" y="' + dh + '" ' +
+	'rx="' + reso + '" ry="' + reso + '" ' +
+	'width="' + weso + '" height="' + heso + '" />');
 
 	this.danaDom = $('<div>').
 	data('tavli', this.tavli).
 	data('pektis', this.pektis).
 	data('id', this.id).
 	addClass('tavlijsPouliDana').
-	addClass('tavlijsPouliDana' + this.pektis).
-	append(canvasDom);
+	append(svgDom);
 
 	return this;
 };
