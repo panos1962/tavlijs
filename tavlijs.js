@@ -190,27 +190,20 @@ this.pios = 0;
 	appendTo(misoDom[i ? 0 : 1]);
 
 	let zariDom = [];
-	let w = this.platos * 0.035;
-	let wz = this.platos * 0.045;
-	let bl = -this.platos * 0.0049;
+	let zw = this.platos * 0.050;
+	let zm = zw * 0.08;
+	let zb = zw * 0.14;
 
-	for (i = 0; i < this.zari.length; i++) {
-		zariDom[i] = this.zari[i].domGet().
-		css({
-			'width': w + 'px',
-			'height': w + 'px',
-		}).
-		css('border-width', this.platos * 0.015).
-		appendTo(zariaDom[this.pios]);
-
-		zariDom[i].children('.tavlijsZariIkona').
-		css({
-			'width': wz + 'px',
-			'height': wz + 'px',
-			'bottom': bl + 'px',
-			'left': bl + 'px',
-		});
-	}
+	for (i = 0; i < this.zari.length; i++)
+	zariDom[i] = this.zari[i].domGet().
+	css({
+		'width': zw + 'px',
+		'height': zw + 'px',
+		'border-width': zb + 'px',
+		'margin-left': zm + 'px',
+		'margin-right': zm + 'px',
+	}).
+	appendTo(zariaDom[this.pios]);
 
 	if (this.zari.length === 2) {
 		if (this.zari[0].face !== this.zari[1].face) {
@@ -576,11 +569,10 @@ tavlijs.zari.prototype.tixiSet = function() {
 };
 
 tavlijs.zari.prototype.domCreate = function() {
-	this.dom = $('<div>').
+	this.dom = $('<img>').
 	addClass('tavlijsZari').
-	append($('<img>').
 	attr('src', 'ikona/' + this.face + '.png').
-	addClass('tavlijsZariIkona'));
+	addClass('tavlijsZari');
 
 	return this;
 };

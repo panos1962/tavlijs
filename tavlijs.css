@@ -240,29 +240,19 @@ background-color: yellow;
 /******************************************************************************/
 
 .tavlijsZari {
-	position: relative;
-	display: inline-block;
-	text-align: center;
-	margin: 0 1.5%;
 	border-style: solid;
 	border-width: 0;
-	border-color: transparent;
+	border-color: yellow;
 	border-radius: 21%;
-background-color: yellow;
-/*
-*/
-}
-
-.tavlijsZariIkona {
-	position: absolute;
+	--pexia-color: #ff99002e;
 }
 
 .tavlijsZariLeft {
-	border-left-color: #003399;
-	border-bottom-color: #003399;
+	border-left-color: var(--pexia-color);
+	border-bottom-color: var(--pexia-color);
 }
 
 .tavlijsZariRight {
-	border-top-color: #003399;
-	border-right-color: #003399;
+	border-top-color: var(--pexia-color);
+	border-right-color: var(--pexia-color);
 }
