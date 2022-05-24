@@ -90,7 +90,7 @@ background-color: #919ba7;
 	left: 4%;
 	width: 92%;
 	height: 96%;
-	background-color: #F4DEB3;
+	background-color: #ffe9b8;
 }
 
 /******************************************************************************/
@@ -171,11 +171,11 @@ background-color: red;
 }
 
 .tavlijsThesiTrigono0 {
-	fill: #D2B48C;
+	fill: #d5a76b;
 }
 
 .tavlijsThesiTrigono1 {
-	fill: #CD853E;
+	fill: #df9d5c;
 }
 
 /******************************************************************************/
@@ -198,7 +198,7 @@ background-color: cyan;
 }
 
 .tavlijsPouliMesi0 {
-	fill: #cba988;
+	fill: #c5bb8e;
 }
 
 .tavlijsPouliMesi1 {
@@ -206,7 +206,7 @@ background-color: cyan;
 }
 
 .tavlijsPouliEso0 {
-	fill: #F5F5DC;
+	fill: #ffffe0;
 }
 
 .tavlijsPouliEso1 {
