@@ -84,6 +84,45 @@ tavlijs.tavli = function(props) {
 	this.pexia = 0;
 };
 
+tavlijs.tavli.prototype.piosSet = function(pektis) {
+	if (pektis === undefined)
+	delete this.pios;
+
+	else
+	this.pios = pektis;
+
+	return this;
+};
+
+tavlijs.tavli.prototype.piosGet = function() {
+	return this.pios;
+};
+
+tavlijs.tavli.prototype.zariaSet = function(zari1, zari2) {
+	if (zari1 === undefined)
+	zari1 = new tavlijs.zari().tixiSet();
+
+	else if (!(zari1 instanceof tavlijs.zari))
+	zari1 = new tavlijs.zari(zari1);
+
+	if (zari2 === undefined)
+	zari2 = new tavlijs.zari().tixiSet();
+
+	else if (!(zari2 instanceof tavlijs.zari))
+	zari2 = new tavlijs.zari(zari2);
+
+	this.zari = [
+		zari1,
+		zari2,
+	];
+
+	return this;
+};
+
+tavlijs.tavli.prototype.zariGet = function(n) {
+	return this.zari[n].face;
+};
+
 tavlijs.tavli.prototype.domCreate = function() {
 	let i;
 
@@ -138,6 +177,7 @@ tavlijs.tavli.prototype.domCreate = function() {
 	(new tavlijs.perioxi(this, 2)).domGet().appendTo(misoDom[1]);
 	(new tavlijs.perioxi(this, 3)).domGet().appendTo(misoDom[0]);
 
+this.pios = 0;
 	// Ακολουθούν δύο περιοχές στις οποίες τοποθετούνται τα ζάρια.
 	// Πρόκειται για δύο οζιζόντιες λωρίδες που βρίσκονται ανάμεσα
 	// από την κάτω και την επάνω περιοχή καθενός από τα δύο μισά
@@ -149,15 +189,28 @@ tavlijs.tavli.prototype.domCreate = function() {
 	zariaDom[i] = (new tavlijs.zaria(i)).domGet().
 	appendTo(misoDom[i ? 0 : 1]);
 
-this.pios = 0;
-this.pexiaCount = 1;
-
 	let zariDom = [];
+	let w = this.platos * 0.035;
+	let wz = this.platos * 0.045;
+	let bl = -this.platos * 0.0049;
 
-	for (i = 0; i < this.zari.length; i++)
-	zariDom[i] = this.zari[i].domGet().
-	css('border-width', this.platos * 0.008).
-	appendTo(zariaDom[this.pios]);
+	for (i = 0; i < this.zari.length; i++) {
+		zariDom[i] = this.zari[i].domGet().
+		css({
+			'width': w + 'px',
+			'height': w + 'px',
+		}).
+		css('border-width', this.platos * 0.015).
+		appendTo(zariaDom[this.pios]);
+
+		zariDom[i].children('.tavlijsZariIkona').
+		css({
+			'width': wz + 'px',
+			'height': wz + 'px',
+			'bottom': bl + 'px',
+			'left': bl + 'px',
+		});
+	}
 
 	if (this.zari.length === 2) {
 		if (this.zari[0].face !== this.zari[1].face) {
@@ -515,6 +568,11 @@ tavlijs.pouli.prototype.danaDomGet = function() {
 
 tavlijs.zari = function(face) {
 	this.face = face;
+};
+
+tavlijs.zari.prototype.tixiSet = function() {
+	this.face = Math.floor(Math.random() * 6) + 1;
+	return this;
 };
 
 tavlijs.zari.prototype.domCreate = function() {

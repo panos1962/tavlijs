@@ -5,28 +5,33 @@ $(function() {
 	let t;
 
 	[
-70,
-/*
-100,
-*/
-200,
-/*
-300,
-400,
-*/
-/*
-450,
-*/
-/*
-*/
-500,
-700,
-/*
-2000,
-*/
-3000,
+		70,
+		/*
+		100,
+		200,
+		300,
+		*/
+		400,
+		/*
+		450,
+		500,
+		*/
+		700,
+		/*
+		2000,
+		*/
+		3000,
 	].forEach(function(w) {
 		t = new tavlijs.tavli({'platos': w});
+
+		t.piosSet(Math.floor(Math.random() * 2));
+		t.zariaSet();
+
+		if (t.zariGet(0) === t.zariGet(1))
+		t.pexiaCount = Math.floor(Math.random() * 5);
+
+		else
+		t.pexiaCount = Math.floor(Math.random() * 3);
 
 for (let i = 0; i < 15; i++)
 t.thiki[0].pouliPush(new tavlijs.pouli(t, 0, i));
@@ -56,11 +61,8 @@ for (let i = 6; i < 21; i++) {
 	for (let j = 0; j < i - 5; j++)
 	t.thesi[i].pouliPush(new tavlijs.pouli(t, i % 2, i));
 
-	t.zari = [
-		new tavlijs.zari(5),
-		new tavlijs.zari(3),
-	];
 }
+
 		t.domGet().appendTo(bodyDOM);
 	});
 });
