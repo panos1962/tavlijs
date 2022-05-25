@@ -3,12 +3,10 @@
 	display: inline-block;
 	margin: 0.2%;
 	font-size: 0px;
-/*
-border-style: solid;
-border-width: 1px;
-border-color: black;
-background-color: red;
-*/
+	user-select: none;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
 }
 
 /******************************************************************************/
@@ -190,7 +188,7 @@ background-color: cyan;
 }
 
 .tavlijsPouliExo0 {
-	fill: #917744;
+	fill: #6e5a33;
 }
 
 .tavlijsPouliExo1 {
