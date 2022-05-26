@@ -3,6 +3,7 @@
 $(function() {
 	let bodyDOM = $(document.body);
 	let t;
+tavlijs.init();
 
 	[
 		70,

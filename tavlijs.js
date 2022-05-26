@@ -393,7 +393,7 @@ tavlijs.thesi.prototype.domCreate = function() {
 	let thesi = this;
 
 	this.dom = $('<div>').
-	data('id', this.id).
+	data('thesi', this).
 	addClass('tavlijsThesi').
 	css('width', (this.tavli.platos * 0.0640) + 'px');
 
@@ -448,8 +448,16 @@ tavlijs.dana.prototype.countGet = function() {
 	return this.plist.length;
 };
 
-tavlijs.dana.prototype.pouliGet = function(i) {
-	return this.plist[i];
+tavlijs.dana.prototype.pouliGet = function(n) {
+	let max = this.countGet() - 1;
+
+	if (n === undefined)
+	n = max;
+
+	if ((n < 0) || (n > max))
+	return undefined;
+
+	return this.plist[n];
 };
 
 tavlijs.dana.prototype.pouliPush = function(pouli) {
@@ -557,6 +565,18 @@ tavlijs.pouli.prototype.danaDomGet = function() {
 	return this.danaDom;
 };
 
+tavlijs.pouli.prototype.domCandiSet = function(on) {
+	let dom = this.domGet();
+
+	if (on)
+	dom.addClass('tavlijsCandi');
+
+	else
+	dom.removeClass('tavlijsCandi');
+
+	return this;
+};
+
 ///////////////////////////////////////////////////////////////////////////////@
 
 tavlijs.zari = function(face) {
@@ -585,3 +605,64 @@ tavlijs.zari.prototype.domGet = function() {
 };
 
 ///////////////////////////////////////////////////////////////////////////////@
+
+tavlijs.candiSet = function(pouli) {
+	let candi = tavlijs.candiGet();
+
+	if (candi)
+	candi.domCandiSet(false);
+
+	tavlijs.candi = pouli;
+
+	if (!tavlijs.candi)
+	return tavlijs;
+
+	tavlijs.candi.domCandiSet(true);
+
+	return tavlijs;
+};
+
+tavlijs.candiGet = function() {
+	return tavlijs.candi;
+};
+
+tavlijs.thesiCandiSet = function(e, thesi) {
+	e.stopPropagation();
+	e.preventDefault();
+
+	tavlijs.candiSet();
+
+	thesi = thesi.data('thesi');
+
+	if (!thesi)
+	return;
+
+	let dana = thesi.dana;
+
+	if (!dana)
+	return;
+
+	tavlijs.candiSet(dana.pouliGet());
+
+	return tavlijs;
+};
+
+tavlijs.init = function() {
+	let bodyDOM = $(document.body);
+
+	bodyDOM.
+	on('mousedown', '.tavlijsThesi', function(e) {
+		tavlijs.thesiCandiSet(e, $(this));
+	}).
+	on('click', '.tavlijsThesi', function(e) {
+		tavlijs.thesiCandiSet(e, $(this));
+	}).
+	on('mouseup', function(e) {
+		e.stopPropagation();
+		e.preventDefault();
+
+		tavlijs.candiSet();
+	});
+
+	return tavlijs;
+};
