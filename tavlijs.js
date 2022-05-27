@@ -565,18 +565,6 @@ tavlijs.pouli.prototype.danaDomGet = function() {
 	return this.danaDom;
 };
 
-tavlijs.pouli.prototype.domCandiSet = function(on) {
-	let dom = this.domGet();
-
-	if (on)
-	dom.addClass('tavlijsCandi');
-
-	else
-	dom.removeClass('tavlijsCandi');
-
-	return this;
-};
-
 ///////////////////////////////////////////////////////////////////////////////@
 
 tavlijs.zari = function(face) {
@@ -606,62 +594,34 @@ tavlijs.zari.prototype.domGet = function() {
 
 ///////////////////////////////////////////////////////////////////////////////@
 
-tavlijs.candiSet = function(pouli) {
-	let candi = tavlijs.candiGet();
-
-	if (candi)
-	candi.domCandiSet(false);
-
-	tavlijs.candi = pouli;
-
-	if (!tavlijs.candi)
-	return tavlijs;
-
-	tavlijs.candi.domCandiSet(true);
-
-	return tavlijs;
-};
-
-tavlijs.candiGet = function() {
-	return tavlijs.candi;
-};
-
-tavlijs.thesiCandiSet = function(e, thesi) {
-	e.stopPropagation();
-	e.preventDefault();
-
-	tavlijs.candiSet();
-
-	thesi = thesi.data('thesi');
-
-	if (!thesi)
-	return;
-
-	let dana = thesi.dana;
-
-	if (!dana)
-	return;
-
-	tavlijs.candiSet(dana.pouliGet());
-
-	return tavlijs;
-};
-
 tavlijs.init = function() {
 	let bodyDOM = $(document.body);
 
 	bodyDOM.
+
 	on('mousedown', '.tavlijsThesi', function(e) {
 		tavlijs.thesiCandiSet(e, $(this));
 	}).
 	on('click', '.tavlijsThesi', function(e) {
 		tavlijs.thesiCandiSet(e, $(this));
 	}).
-	on('mouseup', function(e) {
-		e.stopPropagation();
-		e.preventDefault();
 
-		tavlijs.candiSet();
+	on('mousedown', '.tavlijsThiki', function(e) {
+		tavlijs.thikiCandiSet(e, $(this));
+	}).
+	on('click', '.tavlijsThiki', function(e) {
+		tavlijs.thikiCandiSet(e, $(this));
+	}).
+
+	on('mousedown', '.tavlijsExo', function(e) {
+		tavlijs.exoCandiSet(e, $(this));
+	}).
+	on('click', '.tavlijsExo', function(e) {
+		tavlijs.exoCandiSet(e, $(this));
+	}).
+
+	on('mouseup', function(e) {
+		tavlijs.thesiCandiUnset(e, $(this));
 	});
 
 	return tavlijs;
