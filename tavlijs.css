@@ -201,10 +201,6 @@ background-color: cyan;
 	fill: #637c55;
 }
 
-.tavlijsPouliExoCandi {
-	fill: #003dff;
-}
-
 .tavlijsPouliMesi0 {
 	fill: #c5bb8e;
 }
@@ -213,20 +209,12 @@ background-color: cyan;
 	fill: #254c0a;
 }
 
-.tavlijsPouliMesiCandi {
-	fill: #50a4e5;
-}
-
 .tavlijsPouliEso0 {
 	fill: #ffffe0;
 }
 
 .tavlijsPouliEso1 {
 	fill: #314c29;
-}
-
-.tavlijsPouliEsoCandi {
-	fill: #69cedb;
 }
 
 .tavlijsPouliDana {
@@ -253,6 +241,14 @@ background-color: yellow;
 	fill: #2a5039;
 }
 
+.tavlijsPouliCandi0 {
+	fill: #ff7000;
+}
+
+.tavlijsPouliCandi1 {
+	fill: #00b2ff;
+}
+
 /******************************************************************************/
 
 .tavlijsZari {
@@ -274,7 +270,3 @@ background-color: yellow;
 }
 
 /******************************************************************************/
-
-.tavlijsCandi {
-	opacity: 0.5;
-}

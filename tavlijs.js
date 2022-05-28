@@ -515,20 +515,21 @@ tavlijs.pouli.prototype.domCreate = function() {
 	let rexo = r * 0.985;
 	let rmesi = r * 0.96;
 	let reso = r * 0.85;
-	let xroma = (this.hasOwnProperty('pektis') ? this.pektis : 'Candi');
 
 	let svgDom = $('<svg width="' + w + '" height="' + w + '">' +
-	'<circle class="tavlijsPouliExo' + xroma + '" ' +
+	'<circle class="tavlijsPouliExo' + this.pektis + '" ' +
 	'cx="' + r + '" cy="' + r + '" ' + 'r="' + rexo + '" />' +
-	'<circle class="tavlijsPouliMesi' + xroma + '" ' +
+	'<circle class="tavlijsPouliMesi' + this.pektis + '" ' +
 	'cx="' + r + '" cy="' + r + '" ' + 'r="' + rmesi + '" />' +
-	'<circle class="tavlijsPouliEso' + xroma + '" ' +
+	'<circle class="tavlijsPouliEso' + this.pektis + '" ' +
 	'cx="' + r + '" cy="' + r + '" ' + 'r="' + reso + '" />');
 
 	this.dom = $('<div>').
 	data('pouli', this).
 	addClass('tavlijsPouli').
 	append(svgDom);
+
+	this.candiDom = $(svgDom.children().get(1));
 
 	///////////////////////////////////////////////////////////////////////@
 
@@ -548,10 +549,10 @@ tavlijs.pouli.prototype.domCreate = function() {
 	reso = heso * 0.10;
 
 	svgDom = $('<svg width="' + w + '" height="' + h + '">' +
-	'<rect class="tavlijsPouliDanaExo' + xroma + '" ' +
+	'<rect class="tavlijsPouliDanaExo' + this.pektis + '" ' +
 	'x="0" y="0" rx="' + rexo + '" ry="' + rexo + '" ' +
 	'width="' + wexo + '" height="' + hexo + '" />' +
-	'<rect class="tavlijsPouliDanaEso' + xroma + '" ' +
+	'<rect class="tavlijsPouliDanaEso' + this.pektis + '" ' +
 	'x="' + dw + '" y="' + dh + '" ' +
 	'rx="' + reso + '" ry="' + reso + '" ' +
 	'width="' + weso + '" height="' + heso + '" />');
@@ -560,6 +561,8 @@ tavlijs.pouli.prototype.domCreate = function() {
 	data('pouli', this.tavli).
 	addClass('tavlijsPouliDana').
 	append(svgDom);
+
+	this.candiDanaDom = $(svgDom.children().get(1));
 
 	return this;
 };
@@ -576,6 +579,38 @@ tavlijs.pouli.prototype.danaDomGet = function() {
 	this.domCreate();
 
 	return this.danaDom;
+};
+
+tavlijs.pouli.prototype.candiDomGet = function() {
+	if (!this.hasOwnProperty('candiDom'))
+	this.domCreate();
+
+	return this.candiDom;
+};
+
+tavlijs.pouli.prototype.candiDanaDomGet = function() {
+	if (!this.hasOwnProperty('candiDanaDom'))
+	this.domCreate();
+
+	return this.candiDanaDom;
+};
+
+tavlijs.pouli.prototype.candiSet = function() {
+	let candiClass = 'tavlijsPouliCandi' + this.pektis;
+
+	this.candiDomGet().addClass(candiClass);
+	this.candiDanaDomGet().addClass(candiClass);
+
+	return this;
+};
+
+tavlijs.pouli.prototype.candiUnset = function() {
+	let candiClass = 'tavlijsPouliCandi' + this.pektis;
+
+	this.candiDomGet().removeClass(candiClass);
+	this.candiDanaDomGet().removeClass(candiClass);
+
+	return this;
 };
 
 ///////////////////////////////////////////////////////////////////////////////@
@@ -611,10 +646,8 @@ tavlijs.zari.prototype.domGet = function() {
 tavlijs.candi = {};
 
 tavlijs.candiClear = function() {
-	if (tavlijs.candi.pouli) {
-		tavlijs.candi.pouli.domGet().removeClass('tavlijsCandi');
-		tavlijs.candi.pouli.danaDomGet().removeClass('tavlijsCandi');
-	}
+	if (tavlijs.candi.pouli)
+	tavlijs.candi.pouli.candiUnset();
 
 	if (tavlijs.candi.dom)
 	tavlijs.candi.dom.remove();
@@ -645,10 +678,9 @@ console.log(e);
 	tavlijs.candi.what = this;
 	tavlijs.candi.pouli = pouli;
 
-	pouli.domGet().addClass('tavlijsCandi');
-	pouli.danaDomGet().addClass('tavlijsCandi');
+	pouli.candiSet();
 
-	let candi = new tavlijs.pouli(pouli.tavli);
+	let candi = new tavlijs.pouli(pouli.tavli, pouli.pektis);
 	tavlijs.candi.dom = candi.domGet().appendTo(tavlijs.arena);
 
 	return tavlijs;
