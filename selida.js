@@ -1,9 +1,9 @@
 "use strict";
 
 $(function() {
-	let bodyDOM = $(document.body);
+	let arenaDom = $('<div>').appendTo($(document.body));
 	let t;
-tavlijs.init();
+tavlijs.init(arenaDom);
 
 	[
 		70,
@@ -64,6 +64,6 @@ for (let i = 6; i < 21; i++) {
 
 }
 
-		t.domGet().appendTo(bodyDOM);
+		t.domGet().appendTo(arenaDom);
 	});
 });

@@ -1,3 +1,9 @@
+.tavlijsArena {
+	position: relative;
+}
+
+/******************************************************************************/
+
 .tavlijsTavli {
 	position: relative;
 	display: inline-block;
@@ -195,6 +201,10 @@ background-color: cyan;
 	fill: #637c55;
 }
 
+.tavlijsPouliExoCandi {
+	fill: #003dff;
+}
+
 .tavlijsPouliMesi0 {
 	fill: #c5bb8e;
 }
@@ -203,12 +213,20 @@ background-color: cyan;
 	fill: #254c0a;
 }
 
+.tavlijsPouliMesiCandi {
+	fill: #50a4e5;
+}
+
 .tavlijsPouliEso0 {
 	fill: #ffffe0;
 }
 
 .tavlijsPouliEso1 {
 	fill: #314c29;
+}
+
+.tavlijsPouliEsoCandi {
+	fill: #69cedb;
 }
 
 .tavlijsPouliDana {
@@ -253,4 +271,10 @@ background-color: yellow;
 .tavlijsZariRight {
 	border-top-color: var(--pexia-color);
 	border-right-color: var(--pexia-color);
+}
+
+/******************************************************************************/
+
+.tavlijsCandi {
+	opacity: 0.5;
 }
