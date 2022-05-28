@@ -645,22 +645,34 @@ tavlijs.zari.prototype.domGet = function() {
 
 tavlijs.candi = {};
 
-tavlijs.candiClear = function() {
+tavlijs.candiClear = function(e) {
+	if (e) {
+		e.preventDefault();
+		e.stopPropagation();
+	}
+
+	let dt = Date.now() - tavlijs.candiSetTimestamp;
+
+	if (dt < 200)
+	return;
+
+	tavlijs.candiSetTimestamp = 0;
+
 	if (tavlijs.candi.pouli)
 	tavlijs.candi.pouli.candiUnset();
 
-	if (tavlijs.candi.dom)
-	tavlijs.candi.dom.remove();
+	if (tavlijs.candi.marka)
+	tavlijs.candi.marka.domGet().remove();
 
 	tavlijs.candi = {};
 };
 
 tavlijs.candiSet = function(e, what) {
-console.log(e);
-	e.preventDefault();
-	e.stopPropagation();
+	let x = e.pageX;
+	let y = e.pageY;
 
 	tavlijs.candiClear();
+	tavlijs.candiSetTimestamp = Date.now();
 
 	if (typeof(what) !== 'object')
 	return tavlijs;
@@ -675,13 +687,23 @@ console.log(e);
 	if (!pouli)
 	return tavlijs;
 
+	if (pouli === tavlijs.candi.pouli)
+	return tavlijs;
+
+	let tavli = what.tavli;
+
 	tavlijs.candi.what = this;
-	tavlijs.candi.pouli = pouli;
+	tavlijs.candi.pouli = pouli.candiSet();
+	tavlijs.candi.marka = new tavlijs.pouli(pouli.tavli, pouli.pektis);
 
-	pouli.candiSet();
+	let markaDom = tavlijs.candi.marka.domGet().appendTo(tavlijs.arena);
+	let r = markaDom.width() / 2;
+	let offset = markaDom.parent().offset();
 
-	let candi = new tavlijs.pouli(pouli.tavli, pouli.pektis);
-	tavlijs.candi.dom = candi.domGet().appendTo(tavlijs.arena);
+	markaDom.css({
+		'top': (y - r - offset.left) + 'px',
+		'left': (x - r - offset.top) + 'px',
+	});
 
 	return tavlijs;
 };
@@ -689,6 +711,8 @@ console.log(e);
 tavlijs.oxiCandi = function() {
 	return !tavlijs.candi.what;
 };
+
+tavlijs.candiSetTimestamp = 0;
 
 tavlijs.init = function(arena) {
 	if (!arena)
@@ -702,24 +726,12 @@ tavlijs.init = function(arena) {
 	on('mousedown', '.tavlijsThiki', function(e) {
 		tavlijs.candiSet(e, $(this).data('thiki'));
 	}).
-	on('click', '.tavlijsThiki', function(e) {
-		tavlijs.candiSet(e, $(this).data('thiki'));
-	}).
-
 	on('mousedown', '.tavlijsExo', function(e) {
 		tavlijs.candiSet(e, $(this).data('exo'));
 	}).
-	on('click', '.tavlijsExo', function(e) {
-		tavlijs.candiSet(e, $(this).data('exo'));
-	}).
-
 	on('mousedown', '.tavlijsThesi', function(e) {
 		tavlijs.candiSet(e, $(this).data('thesi'));
 	}).
-	on('click', '.tavlijsThesi', function(e) {
-		tavlijs.candiSet(e, $(this).data('thesi'));
-	}).
-
 	on('mouseup', function(e) {
 		tavlijs.candiClear(e, $(this));
 	});
