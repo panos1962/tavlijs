@@ -24,6 +24,8 @@
 
 	width: 8%;
 	height: 50%;
+
+	border-radius: 0px 0px 10px 10px;
 }
 
 .tavlijsThiki0 {
@@ -52,6 +54,8 @@ background-color: #548b56;
 
 	width: 8%;
 	height: 50%;
+
+	border-radius: 0px 0px 10px 10px;
 }
 
 .tavlijsExo0 {
@@ -169,6 +173,7 @@ background-color: yellow;
 	display: inline-block;
 	text-align: center;
 	height: 100%;
+	border-radius: 10px 10px 0px 0px;
 /*
 background-color: red;
 */
@@ -270,3 +275,7 @@ background-color: yellow;
 }
 
 /******************************************************************************/
+
+.tavlijsIpodoxi {
+	background-color: #a9c98b;
+}

@@ -6,22 +6,20 @@ $(function() {
 tavlijs.init(arenaDom);
 
 	[
-		70,
 		/*
+		70,
 		100,
 		200,
 		300,
-		*/
 		400,
-		/*
 		450,
-		500,
 		*/
+		500,
 		700,
 		/*
 		2000,
-		*/
 		3000,
+		*/
 	].forEach(function(w) {
 		t = new tavlijs.tavli({'platos': w});
 

@@ -324,7 +324,7 @@ tavlijs.thiki.prototype.domCreate = function() {
 	let thiki = this;
 
 	this.dom = $('<div>').
-	data('thiki', this).
+	data('topos', this).
 	addClass('tavlijsThiki').
 	addClass('tavlijsThiki' + this.pektis);
 
@@ -365,7 +365,7 @@ tavlijs.exo.prototype.domCreate = function() {
 	let exo = this;
 
 	this.dom = $('<div>').
-	data('exo', this).
+	data('topos', this).
 	addClass('tavlijsExo').
 	addClass('tavlijsExo' + this.pektis);
 
@@ -406,7 +406,7 @@ tavlijs.thesi.prototype.domCreate = function() {
 	let thesi = this;
 
 	this.dom = $('<div>').
-	data('thesi', this).
+	data('topos', this).
 	addClass('tavlijsThesi').
 	css('width', (this.tavli.platos * 0.0640) + 'px');
 
@@ -498,6 +498,10 @@ tavlijs.dana.prototype.domGet = function() {
 	this.domCreate();
 
 	return this.dom;
+};
+
+tavlijs.dana.prototype.candiPush = function(candi) {
+	return this;
 };
 
 ///////////////////////////////////////////////////////////////////////////////@
@@ -695,14 +699,20 @@ tavlijs.candiSet = function(e, what) {
 	tavlijs.candi.what = this;
 	tavlijs.candi.pouli = pouli.candiSet();
 	tavlijs.candi.marka = new tavlijs.pouli(pouli.tavli, pouli.pektis);
+	tavlijs.candi.markaX0 = x;
+	tavlijs.candi.markaY0 = y;
 
 	let markaDom = tavlijs.candi.marka.domGet().appendTo(tavlijs.arena);
 	let r = markaDom.width() / 2;
 	let offset = markaDom.parent().offset();
 
-	markaDom.css({
-		'top': (y - r - offset.left) + 'px',
-		'left': (x - r - offset.top) + 'px',
+	tavlijs.candi.markaLeft0 = x - r - offset.top;
+	tavlijs.candi.markaTop0 = y - r - offset.left;
+
+	markaDom.
+	css({
+		'left': tavlijs.candi.markaLeft0 + 'px',
+		'top': tavlijs.candi.markaTop0 + 'px',
 	});
 
 	return tavlijs;
@@ -715,26 +725,150 @@ tavlijs.oxiCandi = function() {
 tavlijs.candiSetTimestamp = 0;
 
 tavlijs.init = function(arena) {
+	let bodyDom = $(document.body);
+
 	if (!arena)
-	arena = $(document.body);
+	arena = bodyDom;
 
 	tavlijs.arena = arena;
 
 	arena.
 	addClass('tavlijsArena').
+	on('mousedown', '.tavlijsThiki,.tavlijsThesi,.tavlijsExo', function(e) {
+		tavlijs.candiSet(e, $(this).data('topos'));
+	});
 
-	on('mousedown', '.tavlijsThiki', function(e) {
-		tavlijs.candiSet(e, $(this).data('thiki'));
-	}).
-	on('mousedown', '.tavlijsExo', function(e) {
-		tavlijs.candiSet(e, $(this).data('exo'));
-	}).
-	on('mousedown', '.tavlijsThesi', function(e) {
-		tavlijs.candiSet(e, $(this).data('thesi'));
+	$(window).
+	on('mousemove', function(e) {
+		tavlijs.mouseMove(e);
 	}).
 	on('mouseup', function(e) {
-		tavlijs.candiClear(e, $(this));
+		tavlijs.mouseUp(e);
 	});
 
 	return tavlijs;
+};
+
+tavlijs.mouseMove = function(e) {
+	e.preventDefault();
+	e.stopPropagation();
+
+	if (!tavlijs.candi.marka)
+	return tavlijs;
+
+	tavlijs.ipodoxiClear();
+	tavlijs.ipodoxiLocate(e);
+
+	let marka = tavlijs.candi.marka;
+	let markaDom = marka.domGet();
+
+	let x0 = tavlijs.candi.markaX0;
+	let y0 = tavlijs.candi.markaY0;
+
+	let dx = e.pageX - x0;
+	let dy = e.pageY - y0;
+
+	let markaLeft = tavlijs.candi.markaLeft0 + dx;
+	let markaTop = tavlijs.candi.markaTop0 + dy;
+
+	markaDom.css({
+		'left': markaLeft + 'px',
+		'top': markaTop + 'px',
+	});
+
+	return tavlijs;
+};
+
+tavlijs.mouseUp = function(e) {
+	e.preventDefault();
+	e.stopPropagation();
+
+	let candi = tavlijs.candi.pouli;
+
+	tavlijs.candiClear();
+
+	if (!tavlijs.ipodoxi)
+	return tavlijs;
+
+	if (!candi)
+	return tavlijs;
+
+	let ipodoxiDom = tavlijs.ipodoxi;
+	let dana = ipodoxiDom.data('topos').dana;
+
+	dana.candiPush(candi);
+
+	tavlijs.ipodoxi = undefined;
+
+	return tavlijs;
+};
+
+///////////////////////////////////////////////////////////////////////////////@
+
+tavlijs.ipodoxiLocate = function(e) {
+	let tavli = tavlijs.candi.marka.tavli;
+	let tavliDom = tavli.domGet();
+
+	tavlijs.ipodoxiClear();
+	tavliDom.
+	find('.tavlijsThesi,.tavlijsThiki,.tavlijsExo').
+	each(function() {
+		if (tavlijs.pointOutsideElement(e, $(this)))
+		return true;
+
+		tavlijs.ipodoxiSet($(this));
+		return false;
+	});
+
+	return tavlijs;
+};
+
+tavlijs.ipodoxi = undefined;
+
+tavlijs.ipodoxiSet = function(dom) {
+	tavlijs.ipodoxiClear();
+	tavlijs.ipodoxi = dom.addClass('tavlijsIpodoxi');
+
+	return tavlijs;
+};
+
+tavlijs.ipodoxiClear = function() {
+	if (!tavlijs.ipodoxi)
+	return tavlijs;
+
+	tavlijs.ipodoxi.removeClass('tavlijsIpodoxi');
+	tavlijs.ipodoxi = undefined;
+
+	return tavlijs;
+};
+
+///////////////////////////////////////////////////////////////////////////////@
+
+tavlijs.pointOutsideElement = function(e, dom) {
+	let x = e.pageX;
+	let y = e.pageY;
+
+	let domOffset = dom.offset();
+	let x0 = domOffset.left;
+	let y0 = domOffset.top;
+
+	let w = dom.width();
+	let h = dom.height();
+
+	let x1 = x0 + w;
+	let y1 = y0 + h;
+
+	if (x < x0)
+	return true;
+
+	if (x > x1)
+	return true;
+
+	if (y < y0)
+	return true;
+
+	if (y > y1)
+	return true;
+
+	return false;
 };
