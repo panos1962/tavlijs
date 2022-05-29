@@ -798,8 +798,7 @@ tavlijs.mouseUp = function(e) {
 
 	dana.candiPush(candi);
 
-	tavlijs.ipodoxi = undefined;
-
+	tavlijs.ipodoxiClear();
 	return tavlijs;
 };
 
