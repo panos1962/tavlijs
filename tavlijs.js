@@ -2,6 +2,8 @@
 
 var tavlijs = {};
 
+tavlijs.platosDefault = 600;
+
 ///////////////////////////////////////////////////////////////////////////////@
 
 // Κάθε τάβλι έχει ένα συνολικό πλάτος στο οποίο, εκτός από το κυρίως ταμπλό
@@ -13,20 +15,13 @@ var tavlijs = {};
 
 tavlijs.platosDefault = 100;
 
-tavlijs.tavli = function(props) {
+tavlijs.tavli = function() {
 	let i;
 
-	if (props === undefined)
-	props = {};
-
-	for (i in props)
-	this[i] = props[i];
-
 	// Το συνολικό πλάτος τού ταμπλό μετριέται σε pixels, και  αποτελεί
-	// property του ταμπλό. Αν δεν καθοριστεί παίρνει default τιμή εδώ.
+	// property του ταμπλό.
 
-	if (!this.hasOwnProperty('platos'))
-	props['platos'] = 600;
+	this.platos = tavlijs.platosDefault;
 
 	// Ως «θήκες» ορίζουμε τις ντάνες που βρίσκονται έξω από το ταμπλό,
 	// στην αριστερά πλευρά. Πρόκειται για δύο ντάνες όπου στην κάτω
@@ -38,7 +33,6 @@ tavlijs.tavli = function(props) {
 	// αφορά τα πούλια του παίκτη 0, και τη θήκη 1 να αφορά τα πούλια
 	// του παίκτη 1.
 
-	if (!this.hasOwnProperty('thiki'))
 	this.thiki = [];
 
 	for (i = 0; i < 2; i++)
@@ -51,7 +45,6 @@ tavlijs.tavli = function(props) {
 	// τα χτυπημένα πούλια του παίκτη 0, ενώ επάνω αριστερά τοποθετούνται
 	// τα χτυπημένα πούλια του παίκτη 1.
 
-	if (!this.hasOwnProperty('exo'))
 	this.exo = [];
 
 	for (i = 0; i < 2; i++)
@@ -63,7 +56,6 @@ tavlijs.tavli = function(props) {
 	// αρστερά και καταλήγοντας στη θέση επάνω αριστερά ακολουθώντας
 	// κυκλική πορεία με φορά αντίστροφη των δεικτών του ρολογιού.
 
-	if (!this.hasOwnProperty('thesi'))
 	this.thesi = [];
 
 	for (i = 0; i < 24; i++)
@@ -83,30 +75,47 @@ tavlijs.tavli = function(props) {
 	if (!this.hasOwnProperty('pexia'))
 	this.pexia = 0;
 
-	// Το property "pios" δείχνει πιος παίκτης έχει σειρά να κάνει την
-	// επόμενη κίνηση. Μπορεί να πάρει τιμές 0 ή 1· σε οποιαδήποτε άλλη
-	// περίπτωση σημαίνει ότι ο παίκτης που έχει σειρά να κάνει την
-	// επόμενη κίνηση είναι ακαθόριστος, πράγμα που μπορεί να συμβαίνει
-	// σε μια νέα παρτίδα.
+	// Το property "epomenos" δείχνει ποιος παίκτης έχει σειρά να κάνει
+	// την (όποια) επόμενη κίνηση. Επομένως, οι τιμές που μπορεί να πάρει
+	// το property "epomenos" είναι 0, 1 και undefined.
 
-	this.pios = undefined;
+	if (!this.hasOwnProperty('epomenos'))
+	this.epomenos = undefined;
 
 	if (!this.hasOwnProperty('kinisi'))
 	this.kinisi = [];
 };
 
-tavlijs.tavli.prototype.piosSet = function(pektis) {
-	if (pektis === undefined)
-	delete this.pios;
+///////////////////////////////////////////////////////////////////////////////@
+
+tavlijs.tavli.prototype.platosSet = function(platos) {
+	if (platos === undefined)
+	this.platos = tavlijs.platosDefault;
 
 	else
-	this.pios = pektis;
+	this.platos = platos;
 
 	return this;
 };
 
-tavlijs.tavli.prototype.piosGet = function() {
-	return this.pios;
+tavlijs.tavli.prototype.platosGet = function() {
+	return this.platos;
+};
+
+///////////////////////////////////////////////////////////////////////////////@
+
+tavlijs.tavli.prototype.epomenosSet = function(pektis) {
+	if (pektis === undefined)
+	delete this.epomenos;
+
+	else
+	this.epomenos = pektis;
+
+	return this;
+};
+
+tavlijs.tavli.prototype.epomenosGet = function() {
+	return this.epomenos;
 };
 
 tavlijs.tavli.prototype.zariaSet = function(zari1, zari2) {
@@ -134,13 +143,14 @@ tavlijs.tavli.prototype.zariGet = function(n) {
 	return this.zari[n].face;
 };
 
-tavlijs.tavli.prototype.domCreate = function() {
+tavlijs.tavli.prototype.dom = function() {
+	let dom;
 	let i;
 
 	// Η συνολική εικόνα περιλαμβάνει τις «θήκες» (αριστερά), το κυρίως
 	// ταμπλό (κέντρο) και τα «έξω» (δεξιά).
 
-	this.dom = $('<div>').
+	dom = $('<div>').
 	data('tavli', this).
 	addClass('tavlijsTavli').
 	css({
@@ -151,12 +161,12 @@ tavlijs.tavli.prototype.domCreate = function() {
 	// Εκκινούμε με τις «θήκες» στην αριστερή πλευρά.
 
 	for (i = 0; i < 2; i++)
-	this.thiki[i].domGet().appendTo(this.dom);
+	this.thiki[i].dom().appendTo(dom);
 
 	// Συνεχίζουμε με τα «έξω» στη δεξιά πελυρά.
 
 	for (i = 0; i < 2; i++)
-	this.exo[i].domGet().appendTo(this.dom);
+	this.exo[i].dom().appendTo(dom);
 
 	// Ακολουθεί το κυρίως ταμπλό στο κέντρο. Το ταμπλό αποτελείται από
 	// δύο μέρη, όπως το πραγματικό ταμπλό.
@@ -173,10 +183,12 @@ tavlijs.tavli.prototype.domCreate = function() {
 	// το περίγραμμα του ταμπλό.
 
 	for (i = 0; i < 2; i++)
-	$('<div>').addClass('tavlijsMisoArea tavlijsMisoArea' + i).
+	$('<div>').
+	addClass('tavlijsMisoArea tavlijsMisoArea' + i).
 	css('box-shadow', ws + 'px ' + ws + 'px ' + (2 * ws) + 'px #4e4629').
-	append(misoDom[i] = $('<div>').addClass('tavlijsMiso')).
-	appendTo(this.dom);
+	append(misoDom[i] = $('<div>').
+	addClass('tavlijsMiso')).
+	appendTo(dom);
 
 	// Σε κάθε μισό εντάσσουμε μια «περιοχή» όπου κάθε περιοχή περιέχει
 	// έξι θέσεις στις οποίες τοποθετούνται τα πούλια καθώς παίζεται το
@@ -184,12 +196,11 @@ tavlijs.tavli.prototype.domCreate = function() {
 	// περιοχή κάτω αριστερά και καταλήγοντας επάνω αριστερά ακολουθώντας
 	// κυκλική τροχία με φορά αντίστροφή από αυτήν των δεικων του ρολογιού.
 
-	(new tavlijs.perioxi(this, 0)).domGet().appendTo(misoDom[0]);
-	(new tavlijs.perioxi(this, 1)).domGet().appendTo(misoDom[1]);
-	(new tavlijs.perioxi(this, 2)).domGet().appendTo(misoDom[1]);
-	(new tavlijs.perioxi(this, 3)).domGet().appendTo(misoDom[0]);
+	(new tavlijs.perioxi(this, 0)).dom().appendTo(misoDom[0]);
+	(new tavlijs.perioxi(this, 1)).dom().appendTo(misoDom[1]);
+	(new tavlijs.perioxi(this, 2)).dom().appendTo(misoDom[1]);
+	(new tavlijs.perioxi(this, 3)).dom().appendTo(misoDom[0]);
 
-this.pios = 0;
 	// Ακολουθούν δύο περιοχές στις οποίες τοποθετούνται τα ζάρια.
 	// Πρόκειται για δύο οζιζόντιες λωρίδες που βρίσκονται ανάμεσα
 	// από την κάτω και την επάνω περιοχή καθενός από τα δύο μισά
@@ -198,7 +209,7 @@ this.pios = 0;
 	let zariaDom = [];
 
 	for (i = 0; i < 2; i++)
-	zariaDom[i] = (new tavlijs.zaria(i)).domGet().
+	zariaDom[i] = (new tavlijs.zaria(i)).dom().
 	appendTo(misoDom[i ? 0 : 1]);
 
 	let zariDom = [];
@@ -207,7 +218,7 @@ this.pios = 0;
 	let zb = zw * 0.14;
 
 	for (i = 0; i < this.zari.length; i++)
-	zariDom[i] = this.zari[i].domGet().
+	zariDom[i] = this.zari[i].dom().
 	css({
 		'width': zw + 'px',
 		'height': zw + 'px',
@@ -215,7 +226,7 @@ this.pios = 0;
 		'margin-left': zm + 'px',
 		'margin-right': zm + 'px',
 	}).
-	appendTo(zariaDom[this.pios]);
+	appendTo(zariaDom[this.epomenos]);
 
 	if (this.zari.length === 2) {
 		if (this.zari[0].face !== this.zari[1].face) {
@@ -241,14 +252,7 @@ this.pios = 0;
 		}
 	}
 
-	return this;
-};
-
-tavlijs.tavli.prototype.domGet = function() {
-	if (!this.hasOwnProperty('dom'))
-	this.domCreate();
-
-	return this.dom;
+	return dom;
 };
 
 ///////////////////////////////////////////////////////////////////////////////@
@@ -258,8 +262,8 @@ tavlijs.perioxi = function(tavli, id) {
 	this.id = id;
 }
 
-tavlijs.perioxi.prototype.domCreate = function() {
-	this.dom = $('<div>').
+tavlijs.perioxi.prototype.dom = function() {
+	let dom = $('<div>').
 	data('perioxi', this).
 	addClass('tavlijsPerioxi').
 	addClass('tavlijsPerioxi' + this.id);
@@ -267,16 +271,9 @@ tavlijs.perioxi.prototype.domCreate = function() {
 	let id = this.id * 6;
 
 	for (let i = 0; i < 6; i++, id++)
-	this.tavli.thesi[id].domGet().appendTo(this.dom);
+	this.tavli.thesi[id].dom().appendTo(dom);
 
-	return this;
-};
-
-tavlijs.perioxi.prototype.domGet = function() {
-	if (!this.hasOwnProperty('dom'))
-	this.domCreate();
-
-	return this.dom;
+	return dom;
 };
 
 ///////////////////////////////////////////////////////////////////////////////@
@@ -286,19 +283,12 @@ tavlijs.zaria = function(tavli, pektis) {
 	this.pektis = pektis;
 }
 
-tavlijs.zaria.prototype.domCreate = function() {
-	this.dom = $('<div>').
+tavlijs.zaria.prototype.dom = function() {
+	let dom = $('<div>').
 	data('zaria', this).
 	addClass('tavlijsZaria');
 
-	return this;
-};
-
-tavlijs.zaria.prototype.domGet = function() {
-	if (!this.hasOwnProperty('dom'))
-	this.domCreate();
-
-	return this.dom;
+	return dom;
 };
 
 ///////////////////////////////////////////////////////////////////////////////@
@@ -310,36 +300,26 @@ tavlijs.thiki = function(tavli, pektis) {
 };
 
 tavlijs.thiki.prototype.pouliWalk = function(callback) {
-	this.dana.plist.forEach(callback);
+	this.dana.pouliWalk(callback);
 	return this;
 };
 
 tavlijs.thiki.prototype.pouliPush = function(pouli) {
 	this.dana.pouliPush(pouli);
-
 	return this;
 };
 
-tavlijs.thiki.prototype.domCreate = function() {
-	let thiki = this;
-
-	this.dom = $('<div>').
+tavlijs.thiki.prototype.dom = function() {
+	let dom = $('<div>').
 	data('topos', this).
 	addClass('tavlijsThiki').
 	addClass('tavlijsThiki' + this.pektis);
 
 	this.pouliWalk(function(pouli) {
-		pouli.danaDomGet().appendTo(thiki.dom);
+		pouli.plakaDom().appendTo(dom);
 	});
 
-	return this;
-};
-
-tavlijs.thiki.prototype.domGet = function() {
-	if (!this.hasOwnProperty('dom'))
-	this.domCreate();
-
-	return this.dom;
+	return dom;
 };
 
 ///////////////////////////////////////////////////////////////////////////////@
@@ -357,30 +337,21 @@ tavlijs.exo.prototype.pouliPush = function(pouli) {
 };
 
 tavlijs.exo.prototype.pouliWalk = function(callback) {
-	this.dana.plist.forEach(callback);
+	this.dana.pouliWalk(callback);
 	return this;
 };
 
-tavlijs.exo.prototype.domCreate = function() {
-	let exo = this;
-
-	this.dom = $('<div>').
+tavlijs.exo.prototype.dom = function() {
+	let dom = $('<div>').
 	data('topos', this).
 	addClass('tavlijsExo').
 	addClass('tavlijsExo' + this.pektis);
 
 	this.pouliWalk(function(pouli) {
-		pouli.danaDomGet().appendTo(exo.dom);
+		pouli.plakaDom().appendTo(dom);
 	});
 
-	return this;
-};
-
-tavlijs.exo.prototype.domGet = function() {
-	if (!this.hasOwnProperty('dom'))
-	this.domCreate();
-
-	return this.dom;
+	return dom;
 };
 
 ///////////////////////////////////////////////////////////////////////////////@
@@ -392,7 +363,7 @@ tavlijs.thesi = function(tavli, id) {
 };
 
 tavlijs.thesi.prototype.pouliWalk = function(callback) {
-	this.dana.plist.forEach(callback);
+	this.dana.pouliWalk(callback);
 	return this;
 };
 
@@ -402,10 +373,8 @@ tavlijs.thesi.prototype.pouliPush = function(pouli) {
 	return this;
 };
 
-tavlijs.thesi.prototype.domCreate = function() {
-	let thesi = this;
-
-	this.dom = $('<div>').
+tavlijs.thesi.prototype.dom = function() {
+	let dom = $('<div>').
 	data('topos', this).
 	addClass('tavlijsThesi').
 	css('width', (this.tavli.platos * 0.0640) + 'px');
@@ -416,7 +385,7 @@ tavlijs.thesi.prototype.domCreate = function() {
 	$('<svg width="' + w + '" height="' + h + '">' +
 	'<polygon class="tavlijsThesiTrigono' + (this.id % 2) + '" ' +
 	'points="0,' + h + ' ' + (w / 2) + ',0' + ' ' + w + ',' + h + '"/>').
-	appendTo(this.dom);
+	appendTo(dom);
 
 	let b = this.tavli.platos * 0.0005;
 	let dh1 = this.tavli.platos * 0.0635;
@@ -436,19 +405,12 @@ tavlijs.thesi.prototype.domCreate = function() {
 
 	let n = 0;
 	this.pouliWalk(function(pouli) {
-		thesi.dom.append(pouli.domGet().css('bottom', b + 'px'));
+		pouli.kermaDom().css('bottom', b + 'px').appendTo(dom);
 		n++;
 		b += (n > orio ? dh2 : dh1)
 	});
 
-	return this;
-};
-
-tavlijs.thesi.prototype.domGet = function() {
-	if (!this.hasOwnProperty('dom'))
-	this.domCreate();
-
-	return this.dom;
+	return dom;
 };
 
 ///////////////////////////////////////////////////////////////////////////////@
@@ -482,6 +444,12 @@ tavlijs.dana.prototype.pouliPop = function() {
 	return this.plist.pop();
 };
 
+tavlijs.dana.prototype.pouliWalk = function(callback) {
+	this.plist.forEach(callback);
+
+	return this;
+};
+
 tavlijs.dana.prototype.domCreate = function() {
 	this.dom = $('<div>').
 	data('dana', this).
@@ -513,7 +481,7 @@ tavlijs.pouli = function(tavli, pektis) {
 	this.pektis = pektis;
 };
 
-tavlijs.pouli.prototype.domCreate = function() {
+tavlijs.pouli.prototype.kermaDom = function() {
 	let w = this.tavli.platos * 0.064;
 	let r = w / 2;
 	let rexo = r * 0.985;
@@ -521,23 +489,25 @@ tavlijs.pouli.prototype.domCreate = function() {
 	let reso = r * 0.85;
 
 	let svgDom = $('<svg width="' + w + '" height="' + w + '">' +
-	'<circle class="tavlijsPouliExo' + this.pektis + '" ' +
+	'<circle class="tavlijsPouliExoKerma' + this.pektis + '" ' +
 	'cx="' + r + '" cy="' + r + '" ' + 'r="' + rexo + '" />' +
-	'<circle class="tavlijsPouliMesi' + this.pektis + '" ' +
+	'<circle class="tavlijsPouliMesiKerma' + this.pektis + '" ' +
 	'cx="' + r + '" cy="' + r + '" ' + 'r="' + rmesi + '" />' +
-	'<circle class="tavlijsPouliEso' + this.pektis + '" ' +
+	'<circle class="tavlijsPouliEsoKerma' + this.pektis + '" ' +
 	'cx="' + r + '" cy="' + r + '" ' + 'r="' + reso + '" />');
 
-	this.dom = $('<div>').
+	let dom = $('<div>').
 	data('pouli', this).
-	addClass('tavlijsPouli').
+	addClass('tavlijsPouliKerma').
 	append(svgDom);
 
 	this.candiDom = $(svgDom.children().get(1));
 
-	///////////////////////////////////////////////////////////////////////@
+	return dom;
+};
 
-	w = this.tavli.platos * 0.062;
+tavlijs.pouli.prototype.plakaDom = function() {
+	let w = this.tavli.platos * 0.062;
 	let h = w * 0.32;
 
 	let wexo = w * 0.99;
@@ -549,50 +519,36 @@ tavlijs.pouli.prototype.domCreate = function() {
 	let dw = (wexo - weso) / 2;
 	let dh = (hexo - heso) / 2;
 
-	rexo = hexo * 0.2;
-	reso = heso * 0.10;
+	let rexo = hexo * 0.2;
+	let reso = heso * 0.10;
 
-	svgDom = $('<svg width="' + w + '" height="' + h + '">' +
-	'<rect class="tavlijsPouliDanaExo' + this.pektis + '" ' +
+	let svgDom = $('<svg width="' + w + '" height="' + h + '">' +
+	'<rect class="tavlijsPouliExoPlaka' + this.pektis + '" ' +
 	'x="0" y="0" rx="' + rexo + '" ry="' + rexo + '" ' +
 	'width="' + wexo + '" height="' + hexo + '" />' +
-	'<rect class="tavlijsPouliDanaEso' + this.pektis + '" ' +
+	'<rect class="tavlijsPouliEsoPlaka' + this.pektis + '" ' +
 	'x="' + dw + '" y="' + dh + '" ' +
 	'rx="' + reso + '" ry="' + reso + '" ' +
 	'width="' + weso + '" height="' + heso + '" />');
 
-	this.danaDom = $('<div>').
+	let dom = $('<div>').
 	data('pouli', this.tavli).
-	addClass('tavlijsPouliDana').
+	addClass('tavlijsPouliPlaka').
 	append(svgDom);
 
 	this.candiDanaDom = $(svgDom.children().get(1));
 
-	return this;
+	return dom;
 };
 
-tavlijs.pouli.prototype.domGet = function() {
-	if (!this.hasOwnProperty('dom'))
-	this.domCreate();
-
-	return this.dom;
-};
-
-tavlijs.pouli.prototype.danaDomGet = function() {
-	if (!this.hasOwnProperty('danaDom'))
-	this.domCreate();
-
-	return this.danaDom;
-};
-
-tavlijs.pouli.prototype.candiDomGet = function() {
+tavlijs.pouli.prototype.candiKermaDom = function() {
 	if (!this.hasOwnProperty('candiDom'))
 	this.domCreate();
 
 	return this.candiDom;
 };
 
-tavlijs.pouli.prototype.candiDanaDomGet = function() {
+tavlijs.pouli.prototype.candiPlakaDom = function() {
 	if (!this.hasOwnProperty('candiDanaDom'))
 	this.domCreate();
 
@@ -628,21 +584,14 @@ tavlijs.zari.prototype.tixiSet = function() {
 	return this;
 };
 
-tavlijs.zari.prototype.domCreate = function() {
-	this.dom = $('<img>').
+tavlijs.zari.prototype.dom = function() {
+	let dom = $('<img>').
 	data('zari', this).
 	addClass('tavlijsZari').
 	attr('src', 'ikona/' + this.face + '.png').
 	addClass('tavlijsZari');
 
-	return this;
-};
-
-tavlijs.zari.prototype.domGet = function() {
-	if (!this.hasOwnProperty('dom'))
-	this.domCreate();
-
-	return this.dom;
+	return dom;
 };
 
 ///////////////////////////////////////////////////////////////////////////////@

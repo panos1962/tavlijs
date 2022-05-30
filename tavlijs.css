@@ -189,7 +189,7 @@ background-color: red;
 
 /******************************************************************************/
 
-.tavlijsPouli {
+.tavlijsPouliKerma {
 	position: absolute;
 	bottom: 0;
 	left: 0;
@@ -198,31 +198,31 @@ background-color: cyan;
 */
 }
 
-.tavlijsPouliExo0 {
+.tavlijsPouliExoKerma0 {
 	fill: #6e5a33;
 }
 
-.tavlijsPouliExo1 {
+.tavlijsPouliExoKerma1 {
 	fill: #637c55;
 }
 
-.tavlijsPouliMesi0 {
+.tavlijsPouliMesiKerma0 {
 	fill: #c5bb8e;
 }
 
-.tavlijsPouliMesi1 {
+.tavlijsPouliMesiKerma1 {
 	fill: #254c0a;
 }
 
-.tavlijsPouliEso0 {
+.tavlijsPouliEsoKerma0 {
 	fill: #ffffe0;
 }
 
-.tavlijsPouliEso1 {
+.tavlijsPouliEsoKerma1 {
 	fill: #314c29;
 }
 
-.tavlijsPouliDana {
+.tavlijsPouliPlaka {
 	position: relative;
 	display: inline-block;
 /*
@@ -230,19 +230,19 @@ background-color: yellow;
 */
 }
 
-.tavlijsPouliDanaExo0 {
+.tavlijsPouliPlakaExo0 {
 	fill: #7c7856;
 }
 
-.tavlijsPouliDanaExo1 {
+.tavlijsPouliPlakaExo1 {
 	fill: #072e16;
 }
 
-.tavlijsPouliDanaEso0 {
+.tavlijsPouliPlakaEso0 {
 	fill: #F5F5DC;
 }
 
-.tavlijsPouliDanaEso1 {
+.tavlijsPouliPlakaEso1 {
 	fill: #2a5039;
 }
 

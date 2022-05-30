@@ -21,9 +21,10 @@ tavlijs.init(arenaDom);
 		3000,
 		*/
 	].forEach(function(w) {
-		t = new tavlijs.tavli({'platos': w});
+		t = new tavlijs.tavli();
+		t.platosSet(w);
 
-		t.piosSet(Math.floor(Math.random() * 2));
+		t.epomenosSet(Math.floor(Math.random() * 2));
 		t.zariaSet();
 
 		if (t.zariGet(0) === t.zariGet(1))
@@ -62,6 +63,6 @@ for (let i = 6; i < 21; i++) {
 
 }
 
-		t.domGet().appendTo(arenaDom);
+		t.dom().appendTo(arenaDom);
 	});
 });
