@@ -135,7 +135,6 @@ background-color: teal;
 	position: absolute;
 	display: inline-block;
 	text-align: center;
-	overflow: hidden;
 
 	width: 100%;
 	height: 46%;
@@ -169,7 +168,9 @@ background-color: yellow;
 /******************************************************************************/
 
 .tavlijsThesi {
-	position: relative;
+	position: absolute;
+	left: 0px;
+	bottom: 0px;
 	display: inline-block;
 	text-align: center;
 	height: 100%;

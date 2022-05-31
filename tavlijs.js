@@ -259,6 +259,7 @@ tavlijs.perioxi = function(tavli, id) {
 }
 
 tavlijs.perioxi.prototype.dom = function() {
+	let w = this.tavli.platos * 0.2;
 	let dom = $('<div>').
 	data('perioxi', this).
 	addClass('tavlijsPerioxi').
@@ -370,13 +371,20 @@ tavlijs.thesi.prototype.pouliPush = function(pouli) {
 };
 
 tavlijs.thesi.prototype.dom = function() {
+	let w = this.tavli.platos * 0.0644;
+	let h = this.tavli.platos * 0.3975;
+	let x = (this.id % 6) * w;
+
 	let dom = $('<div>').
 	data('stili', this).
 	addClass('tavlijsThesi').
-	css('width', (this.tavli.platos * 0.0640) + 'px');
+	css({
+		'width': w + 'px',
+		'height': h + 'px',
+		'left': x + 'px',
+	});
 
-	let w = this.tavli.platos * 0.0625;
-	let h = this.tavli.platos * 0.3975;
+	w = this.tavli.platos * 0.0625;
 
 	$('<svg width="' + w + '" height="' + h + '">' +
 	'<polygon class="tavlijsThesiTrigono' + (this.id % 2) + '" ' +
@@ -478,7 +486,7 @@ tavlijs.pouli = function(tavli, pektis) {
 };
 
 tavlijs.pouli.prototype.kermaDom = function() {
-	let w = this.tavli.platos * 0.064;
+	let w = this.tavli.platos * 0.0644;
 	let r = w / 2;
 	let rexo = r * 0.985;
 	let rmesi = r * 0.96;
