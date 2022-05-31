@@ -311,7 +311,7 @@ tavlijs.thiki.prototype.pouliPush = function(pouli) {
 
 tavlijs.thiki.prototype.dom = function() {
 	let dom = $('<div>').
-	data('topos', this).
+	data('stili', this).
 	addClass('tavlijsThiki').
 	addClass('tavlijsThiki' + this.pektis);
 
@@ -343,7 +343,7 @@ tavlijs.exo.prototype.pouliWalk = function(callback) {
 
 tavlijs.exo.prototype.dom = function() {
 	let dom = $('<div>').
-	data('topos', this).
+	data('stili', this).
 	addClass('tavlijsExo').
 	addClass('tavlijsExo' + this.pektis);
 
@@ -375,7 +375,7 @@ tavlijs.thesi.prototype.pouliPush = function(pouli) {
 
 tavlijs.thesi.prototype.dom = function() {
 	let dom = $('<div>').
-	data('topos', this).
+	data('stili', this).
 	addClass('tavlijsThesi').
 	css('width', (this.tavli.platos * 0.0640) + 'px');
 
@@ -489,11 +489,11 @@ tavlijs.pouli.prototype.kermaDom = function() {
 	let reso = r * 0.85;
 
 	let svgDom = $('<svg width="' + w + '" height="' + w + '">' +
-	'<circle class="tavlijsPouliExoKerma' + this.pektis + '" ' +
+	'<circle class="tavlijsPouliKermaExo' + this.pektis + '" ' +
 	'cx="' + r + '" cy="' + r + '" ' + 'r="' + rexo + '" />' +
-	'<circle class="tavlijsPouliMesiKerma' + this.pektis + '" ' +
+	'<circle class="tavlijsPouliKermaMesi' + this.pektis + '" ' +
 	'cx="' + r + '" cy="' + r + '" ' + 'r="' + rmesi + '" />' +
-	'<circle class="tavlijsPouliEsoKerma' + this.pektis + '" ' +
+	'<circle class="tavlijsPouliKermaEso' + this.pektis + '" ' +
 	'cx="' + r + '" cy="' + r + '" ' + 'r="' + reso + '" />');
 
 	let dom = $('<div>').
@@ -523,10 +523,10 @@ tavlijs.pouli.prototype.plakaDom = function() {
 	let reso = heso * 0.10;
 
 	let svgDom = $('<svg width="' + w + '" height="' + h + '">' +
-	'<rect class="tavlijsPouliExoPlaka' + this.pektis + '" ' +
+	'<rect class="tavlijsPouliPlakaExo' + this.pektis + '" ' +
 	'x="0" y="0" rx="' + rexo + '" ry="' + rexo + '" ' +
 	'width="' + wexo + '" height="' + hexo + '" />' +
-	'<rect class="tavlijsPouliEsoPlaka' + this.pektis + '" ' +
+	'<rect class="tavlijsPouliPlakaEso' + this.pektis + '" ' +
 	'x="' + dw + '" y="' + dh + '" ' +
 	'rx="' + reso + '" ry="' + reso + '" ' +
 	'width="' + weso + '" height="' + heso + '" />');
@@ -536,7 +536,7 @@ tavlijs.pouli.prototype.plakaDom = function() {
 	addClass('tavlijsPouliPlaka').
 	append(svgDom);
 
-	this.candiDanaDom = $(svgDom.children().get(1));
+	this.candiDom = $(svgDom.children().get(1));
 
 	return dom;
 };
@@ -625,7 +625,6 @@ tavlijs.candiSet = function(e, what) {
 	let y = e.pageY;
 
 	tavlijs.candiClear();
-	tavlijs.candiSetTimestamp = Date.now();
 
 	if (typeof(what) !== 'object')
 	return tavlijs;
@@ -640,12 +639,14 @@ tavlijs.candiSet = function(e, what) {
 	if (!pouli)
 	return tavlijs;
 
+	// Αν ξανακάνουμε κλικ στο ίδιο πούλι, ακυρώνουμε την προηγούμενη
+	// επιλογή μας.
+
 	if (pouli === tavlijs.candi.pouli)
 	return tavlijs;
 
 	let tavli = what.tavli;
 
-	tavlijs.candi.what = this;
 	tavlijs.candi.pouli = pouli.candiSet();
 	tavlijs.candi.marka = new tavlijs.pouli(pouli.tavli, pouli.pektis);
 	tavlijs.candi.markaX0 = x;
@@ -684,7 +685,7 @@ tavlijs.init = function(arena) {
 	arena.
 	addClass('tavlijsArena').
 	on('mousedown', '.tavlijsThiki,.tavlijsThesi,.tavlijsExo', function(e) {
-		tavlijs.candiSet(e, $(this).data('topos'));
+		tavlijs.candiSet(e, $(this).data('stili'));
 	});
 
 	$(window).
@@ -743,7 +744,7 @@ tavlijs.mouseUp = function(e) {
 	return tavlijs;
 
 	let ipodoxiDom = tavlijs.ipodoxi;
-	let dana = ipodoxiDom.data('topos').dana;
+	let dana = ipodoxiDom.data('stili').dana;
 
 	dana.candiPush(candi);
 
