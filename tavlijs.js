@@ -86,8 +86,6 @@ tavlijs.tavli = function() {
 	this.kinisi = [];
 };
 
-///////////////////////////////////////////////////////////////////////////////@
-
 tavlijs.tavli.prototype.platosSet = function(platos) {
 	if (platos === undefined)
 	this.platos = tavlijs.platosDefault;
@@ -101,8 +99,6 @@ tavlijs.tavli.prototype.platosSet = function(platos) {
 tavlijs.tavli.prototype.platosGet = function() {
 	return this.platos;
 };
-
-///////////////////////////////////////////////////////////////////////////////@
 
 tavlijs.tavli.prototype.epomenosSet = function(pektis) {
 	if (pektis === undefined)
