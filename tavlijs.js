@@ -639,6 +639,7 @@ tavlijs.candiSet = function(e, dom) {
 	// θέτουμε το υποψήφιο προς παίξιμο πούλι μαζί με άλλα σχετικά
 	// properties.
 
+	tavlijs.candi.timestamp = Date.now();
 	tavlijs.candi.pouliDom = pouliDom;
 	tavlijs.candi.pouli = pouli;
 	tavlijs.candi.tavli = tavli;
@@ -670,12 +671,13 @@ tavlijs.candiClear = function() {
 	if (tavlijs.oxiCandi())
 	return tavlijs;
 
+	tavlijs.ipodoxiClear();
+	tavlijs.markaClear();
 	tavlijs.candiXromaSet(false);
 	tavlijs.candi.tavli = undefined;
 	tavlijs.candi.pouli = undefined;
 	tavlijs.candi.pouliDom = undefined;
-
-	tavlijs.markaClear();
+	tavlijs.candi.timestamp = 0;
 
 	return tavlijs;
 };
@@ -752,6 +754,87 @@ tavlijs.oxiMarka = function() {
 	return !tavlijs.isMarka();
 };
 
+tavlijs.ipodoxiSet = function(ipodoxiDom) {
+	tavlijs.ipodoxiClear();
+	tavlijs.candi.ipodoxiDom = ipodoxiDom.addClass('tavlijsIpodoxi');
+
+	return tavlijs;
+};
+
+tavlijs.ipodoxiClear = function() {
+	if (tavlijs.oxiIpodoxi())
+	return tavlijs;
+
+	tavlijs.candi.ipodoxiDom.removeClass('tavlijsIpodoxi');
+	tavlijs.candi.ipodoxiDom = undefined;
+
+	return tavlijs;
+};
+
+tavlijs.isIpodoxi = function() {
+	return tavlijs.candi.ipodoxiDom;
+};
+
+tavlijs.oxiIpodoxi = function() {
+	return !tavlijs.isIpodoxi();
+};
+
+tavlijs.oxiIpodoxeas = function(stiliDom) {
+	if (tavlijs.oxiCandi())
+	return true;
+
+	let stili = stiliDom.data('stili');
+	let tavli = tavlijs.candi.tavli;
+	let epomenos = tavli.epomenos;
+
+	if ((stili instanceof tavlijs.thiki) && (stili.pektis !== epomenos))
+	return true;
+
+	let plist = stiliDom.children('.tavlijsPouli');
+
+	if ((stili instanceof tavlijs.thesi) && (plist.length <= 0))
+	return false;
+
+	let antipalos = (epomenos ? 0 : 1);
+	let count = [
+		0,
+		0,
+	];
+
+	plist.each(function() {
+		let pouli = $(this).data('pouli');
+		count[pouli.pektis]++;
+	});
+
+	if ((stili instanceof tavlijs.thesi) && (count[antipalos] > 1))
+	return true;
+
+	return false;
+};
+
+tavlijs.ipodoxiLocate = function(e) {
+	if (tavlijs.oxiCandi())
+	return tavlijs;
+
+	let tavliDom = tavlijs.candi.pouliDom.closest('.tavlijsTavli');
+	tavlijs.ipodoxiClear();
+
+	tavliDom.
+	find('.tavlijsThesi,.tavlijsThiki').
+	each(function() {
+		if (tavlijs.pointOutsideElement(e, $(this)))
+		return true;
+
+		if (tavlijs.oxiIpodoxeas($(this)))
+		return true;
+
+		tavlijs.ipodoxiSet($(this));
+		return false;
+	});
+
+	return tavlijs;
+};
+
 ///////////////////////////////////////////////////////////////////////////////@
 
 tavlijs.init = function(arena) {
@@ -811,6 +894,9 @@ tavlijs.mouseMove = function(e) {
 		'top': y + 'px',
 	});
 
+	tavlijs.ipodoxiClear();
+	tavlijs.ipodoxiLocate(e);
+
 	return tavlijs;
 };
 
@@ -818,6 +904,13 @@ tavlijs.mouseUp = function(e) {
 	e.preventDefault();
 	e.stopPropagation();
 
+	if (tavlijs.oxiCandi())
+	return tavlijs;
+
+	if ((Date.now() - tavlijs.candi.timestamp) < 200)
+	return tavlijs;
+
+	tavlijs.candiClear();
 	return tavlijs;
 };
 
