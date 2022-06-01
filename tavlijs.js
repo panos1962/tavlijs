@@ -498,7 +498,7 @@ tavlijs.pouli.prototype.kermaDom = function() {
 
 	let dom = $('<div>').
 	data('pouli', this).
-	data('candiDom', $(svgDom.children().get(1))).
+	addClass('tavlijsPouli').
 	addClass('tavlijsPouliKerma').
 	append(svgDom);
 
@@ -532,7 +532,7 @@ tavlijs.pouli.prototype.plakaDom = function() {
 
 	let dom = $('<div>').
 	data('pouli', this).
-	data('candiDom', $(svgDom.children().get(1))).
+	addClass('tavlijsPouli').
 	addClass('tavlijsPouliPlaka').
 	append(svgDom);
 
@@ -612,7 +612,7 @@ tavlijs.candiSet = function(e, dom) {
 	// μπορεί να έχει ή να μην έχει πούλια. Όπως και να έχει, δημιουργούμε
 	// λίστα με τα dom elements των πουλιών της στήλης.
 
-	let plist = dom.children();
+	let plist = dom.children('.tavlijsPouli');
 
 	// Αν η στήλη δεν περιέχει πούλια, τότε δεν υπάρχει πούλι προς επιλογή.
 
@@ -647,6 +647,11 @@ tavlijs.candiSet = function(e, dom) {
 
 	tavlijs.candiXromaSet(true);
 
+	// Κρατάμε τη θέση του ποντικιού τη στιγμή που επιλέγουμε το candi.
+
+	tavlijs.candi.markaX0 = e.pageX;
+	tavlijs.candi.markaY0 = e.pageY;
+
 	return tavlijs;
 };
 
@@ -669,6 +674,8 @@ tavlijs.candiClear = function() {
 	tavlijs.candi.tavli = undefined;
 	tavlijs.candi.pouli = undefined;
 	tavlijs.candi.pouliDom = undefined;
+
+	tavlijs.markaClear();
 
 	return tavlijs;
 };
@@ -709,6 +716,42 @@ tavlijs.candiXromaSet = function(xromatismos) {
 	return tavlijs;
 };
 
+tavlijs.markaSet = function() {
+	if (tavlijs.isMarka())
+	tavlijs.markaClear();
+
+	if (tavlijs.oxiCandi())
+	return tavlijs;
+
+	tavlijs.candi.markaDom = (new tavlijs.pouli(
+		tavlijs.candi.tavli,
+		tavlijs.candi.tavli.epomenos
+	)).
+	kermaDom().
+	addClass('tavlijsMarka').
+	appendTo(tavlijs.arena);
+
+	return tavlijs;
+};
+
+tavlijs.markaClear = function() {
+	if (tavlijs.oxiMarka())
+	return tavlijs;
+
+	tavlijs.candi.markaDom.remove();
+	tavlijs.candi.markaDom = undefined;
+
+	return tavlijs;
+};
+
+tavlijs.isMarka = function() {
+	return tavlijs.candi.markaDom;
+};
+
+tavlijs.oxiMarka = function() {
+	return !tavlijs.isMarka();
+};
+
 ///////////////////////////////////////////////////////////////////////////////@
 
 tavlijs.init = function(arena) {
@@ -739,6 +782,34 @@ tavlijs.init = function(arena) {
 tavlijs.mouseMove = function(e) {
 	e.preventDefault();
 	e.stopPropagation();
+
+	if (tavlijs.oxiCandi())
+	return tavlijs;
+
+	if (tavlijs.oxiMarka())
+	tavlijs.markaSet();
+
+	let markaDom = tavlijs.candi.markaDom;
+	let r = markaDom.width() / 2;
+	let offset = tavlijs.arena.offset();
+
+	// Έχουμε κρατήσει τη θέση του ποντικιού κατά την επιλογή του candi.
+	// Με βάση εκείνες τις συντεταγμένες τοποθετούμε στη σωστή θέση τη
+	// μάρκα.
+
+	let x0 = tavlijs.candi.markaX0;
+	let y0 = tavlijs.candi.markaY0;
+
+	let dx = e.pageX - x0;
+	let dy = e.pageY - y0;
+
+	let x = tavlijs.candi.markaX0 + dx - r - offset.left;
+	let y = tavlijs.candi.markaY0 + dy - r - offset.top;
+
+	markaDom.css({
+		'left': x + 'px',
+		'top': y + 'px',
+	});
 
 	return tavlijs;
 };
