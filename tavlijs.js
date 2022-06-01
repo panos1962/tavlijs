@@ -472,10 +472,6 @@ tavlijs.dana.prototype.domGet = function() {
 	return this.dom;
 };
 
-tavlijs.dana.prototype.candiPush = function(candi) {
-	return this;
-};
-
 ///////////////////////////////////////////////////////////////////////////////@
 
 tavlijs.pouli = function(tavli, pektis) {
@@ -502,10 +498,9 @@ tavlijs.pouli.prototype.kermaDom = function() {
 
 	let dom = $('<div>').
 	data('pouli', this).
+	data('candiDom', $(svgDom.children().get(1))).
 	addClass('tavlijsPouliKerma').
 	append(svgDom);
-
-	this.candiDom = $(svgDom.children().get(1));
 
 	return dom;
 };
@@ -536,45 +531,12 @@ tavlijs.pouli.prototype.plakaDom = function() {
 	'width="' + weso + '" height="' + heso + '" />');
 
 	let dom = $('<div>').
-	data('pouli', this.tavli).
+	data('pouli', this).
+	data('candiDom', $(svgDom.children().get(1))).
 	addClass('tavlijsPouliPlaka').
 	append(svgDom);
 
-	this.candiDom = $(svgDom.children().get(1));
-
 	return dom;
-};
-
-tavlijs.pouli.prototype.candiKermaDom = function() {
-	if (!this.hasOwnProperty('candiDom'))
-	this.domCreate();
-
-	return this.candiDom;
-};
-
-tavlijs.pouli.prototype.candiPlakaDom = function() {
-	if (!this.hasOwnProperty('candiDanaDom'))
-	this.domCreate();
-
-	return this.candiDanaDom;
-};
-
-tavlijs.pouli.prototype.candiSet = function() {
-	let candiClass = 'tavlijsPouliCandi' + this.pektis;
-
-	this.candiDomGet().addClass(candiClass);
-	this.candiDanaDomGet().addClass(candiClass);
-
-	return this;
-};
-
-tavlijs.pouli.prototype.candiUnset = function() {
-	let candiClass = 'tavlijsPouliCandi' + this.pektis;
-
-	this.candiDomGet().removeClass(candiClass);
-	this.candiDanaDomGet().removeClass(candiClass);
-
-	return this;
 };
 
 ///////////////////////////////////////////////////////////////////////////////@
@@ -600,83 +562,154 @@ tavlijs.zari.prototype.dom = function() {
 
 ///////////////////////////////////////////////////////////////////////////////@
 
-tavlijs.candi = {};
+// Με τον όρο "candi" εννοούμε το υποψήφιο προς παίξιμο πούλι. Αυτό μπορεί να
+// είναι ένα πούλι από τη θήκη του παίκτη, ή ένα πούλι από κάποια θέση του
+// board, ή ακόμη και ένα χτυπημένο πούλι του παίκτη. Ωστόσο, ως "candi"
+// ορίζουμε ένα γενικότερο αντικείμενο το οποίο περιέχει το υποψήφιο πούλι
+// ως property, αλλά περιλαμβάνει και άλλα στοιχεία.
 
-tavlijs.candiClear = function(e) {
-	if (e) {
-		e.preventDefault();
-		e.stopPropagation();
-	}
+tavlijs.candi = {
+	// Το property "pouliDom" είναι το dom element του υποψήφιου προς
+	// παίξιμο πουλιού.
 
-	let dt = Date.now() - tavlijs.candiSetTimestamp;
+	'pouliDom': undefined,
 
-	if (dt < 200)
-	return;
+	// Το property "pouli" είναι το αντίστοιχο αντικείμενο.
 
-	tavlijs.candiSetTimestamp = 0;
+	'pouli': undefined,
 
-	if (tavlijs.candi.pouli)
-	tavlijs.candi.pouli.candiUnset();
+	// Το property "tavli" είναι το αντίστοιχο αντικείμενο.
 
-	if (tavlijs.candi.marka)
-	tavlijs.candi.marka.domGet().remove();
+	'tavli': undefined,
 
-	tavlijs.candi = {};
+	// Το property "markaDom" είναι το dom element ενός ξαμολημένου
+	// πουλιού που απλώς ακολουθεί το ποντίκι μας σε περίπτωση που
+	// σύρουμε το υποψήφιο πούλι προς τη στήλη υποδοχής. Το πούλι
+	// "markaDom" είναι προσωρινό και υφίσταται μόνο όσο διαρκεί
+	// η αναζήτηση στήλης υποδοχής.
+
+	'markaDom': undefined,
+
+	// Το property "ipodoxiDom" είναι το dom element της στήλης υποδοχής
+	// του υποψήφιου προς παίξιμο πουλιού.
+
+	'ipodoxiDom': undefined,
 };
 
-tavlijs.candiSet = function(e, what) {
-	let x = e.pageX;
-	let y = e.pageY;
+// Η function "candiSet" καλείται on mousedown σε στήλες (θήκες, έξω και
+// θέσεις). Σκοπός της function είναι να θέσει το υποψήφιο προς παίξιμο
+// πούλι το οποίο είναι το τελευταίο πούλι της στήλης. Γενικά το υπο
+
+tavlijs.candiSet = function(e, dom) {
+	e.preventDefault();
+	e.stopPropagation();
+
+	// Πρώτα ακυρώνουμε τυχόν υφιστάμενο candi.
 
 	tavlijs.candiClear();
 
-	if (typeof(what) !== 'object')
+	// Το dom element αφορά σε κάποια στήλη (θήκη, έχξ ή θέση). Η στήλη
+	// μπορεί να έχει ή να μην έχει πούλια. Όπως και να έχει, δημιουργούμε
+	// λίστα με τα dom elements των πουλιών της στήλης.
+
+	let plist = dom.children();
+
+	// Αν η στήλη δεν περιέχει πούλια, τότε δεν υπάρχει πούλι προς επιλογή.
+
+	if (plist.length <= 0)
 	return tavlijs;
 
-	let pouli = undefined;
+	// Η στήλη έχει πούλια, οπότε επιλέγουμε το τελευταίο πούλι της στήλης
+	// και φέρνουμε στην επιφάνεια και το αντίστοιχο πούλι, αλλά και το
+	// τάβλι, ως αντικείμενα.
 
-	if ((what instanceof tavlijs.thesi) ||
-		(what instanceof tavlijs.thiki) ||
-		(what instanceof tavlijs.exo))
-	pouli = what.dana.pouliGet();
+	let pouliDom = plist.last();
+	let pouli = pouliDom.data('pouli');
+	let tavli = pouli.tavli;
 
-	if (!pouli)
+	// Αν το τελευταίο πούλι της στήλης δεν ανήκει στον παίκτη που έχει
+	// σειρά να παίξει, τότε ακυρώνουμε τη διαδικασία.
+
+	let pektis = pouli.pektis;
+
+	if (pektis !== tavli.epomenos)
 	return tavlijs;
 
-	// Αν ξανακάνουμε κλικ στο ίδιο πούλι, ακυρώνουμε την προηγούμενη
-	// επιλογή μας.
+	// Σε αυτό το σημείο έχουμε περάσει τους απαραίτητους ελέγχους και
+	// θέτουμε το υποψήφιο προς παίξιμο πούλι μαζί με άλλα σχετικά
+	// properties.
 
-	if (pouli === tavlijs.candi.pouli)
-	return tavlijs;
+	tavlijs.candi.pouliDom = pouliDom;
+	tavlijs.candi.pouli = pouli;
+	tavlijs.candi.tavli = tavli;
 
-	let tavli = what.tavli;
+	// Χρωματίζουμε κατάλληλα το υποψήφιο προς παίξιμο πούλι.
 
-	tavlijs.candi.pouli = pouli.candiSet();
-	tavlijs.candi.marka = new tavlijs.pouli(pouli.tavli, pouli.pektis);
-	tavlijs.candi.markaX0 = x;
-	tavlijs.candi.markaY0 = y;
-
-	let markaDom = tavlijs.candi.marka.domGet().appendTo(tavlijs.arena);
-	let r = markaDom.width() / 2;
-	let offset = markaDom.parent().offset();
-
-	tavlijs.candi.markaLeft0 = x - r - offset.top;
-	tavlijs.candi.markaTop0 = y - r - offset.left;
-
-	markaDom.
-	css({
-		'left': tavlijs.candi.markaLeft0 + 'px',
-		'top': tavlijs.candi.markaTop0 + 'px',
-	});
+	tavlijs.candiXromaSet(true);
 
 	return tavlijs;
+};
+
+// Για να ελέγξουμε αν υφίσταται υποψήφιο για παίξιμο πούλι, ελέγχουμε το
+// property "pouliDom".
+
+tavlijs.isCandi = function() {
+	return tavlijs.candi.pouliDom;
 };
 
 tavlijs.oxiCandi = function() {
-	return !tavlijs.candi.what;
+	return !tavlijs.isCandi();
 };
 
-tavlijs.candiSetTimestamp = 0;
+tavlijs.candiClear = function() {
+	if (tavlijs.oxiCandi())
+	return tavlijs;
+
+	tavlijs.candiXromaSet(false);
+	tavlijs.candi.tavli = undefined;
+	tavlijs.candi.pouli = undefined;
+	tavlijs.candi.pouliDom = undefined;
+
+	return tavlijs;
+};
+
+tavlijs.candiXromaSet = function(xromatismos) {
+	if (tavlijs.oxiCandi())
+	return tavlijs;
+
+	// XXX
+	// Θα μπορούσαμε να κάνουμε την αλλαγή χρησιμοποιώντας jQuery,
+	// αλλά το jQuery δεν υποστηρίζει πλήρως τα svg elements, οπότε
+	// καταφεύγουμε vanilla javascript.
+
+	tavlijs.candi.pouliDom.
+
+	// Εντοπίζουμε το svg element του πουλιού ως jQuery list.
+
+	children('svg').
+
+	// Εντοπίζουμε την περιοχή χρωματισμού που είναι το δεύτερο στοιχείο
+	// του svg (κύκλος για κέρματα, ορθογώνιο για πλακίδια).
+
+	children()
+
+	// Εντοπίζουμε την περιοχή χρωματισμού ως plain dom element.
+
+	[1]
+
+	// Εντοπίζουμε τη λίστα κλάσεων του εν λόγω plain dom element και...
+	.classList
+
+	// ...προσθέτουμε ή αφαιρούμε τον χρωματισμό υποψηφίου προς παίξιμο
+	// πουλιού, ανάλογα με την παράμετρο που έχει δοθεί.
+
+	[xromatismos ? 'add' : 'remove']
+	('tavlijsPouliCandi' + tavlijs.candi.tavli.epomenos);
+
+	return tavlijs;
+};
+
+///////////////////////////////////////////////////////////////////////////////@
 
 tavlijs.init = function(arena) {
 	let bodyDom = $(document.body);
@@ -689,7 +722,7 @@ tavlijs.init = function(arena) {
 	arena.
 	addClass('tavlijsArena').
 	on('mousedown', '.tavlijsThiki,.tavlijsThesi,.tavlijsExo', function(e) {
-		tavlijs.candiSet(e, $(this).data('stili'));
+		tavlijs.candiSet(e, $(this));
 	});
 
 	$(window).
@@ -707,90 +740,12 @@ tavlijs.mouseMove = function(e) {
 	e.preventDefault();
 	e.stopPropagation();
 
-	if (!tavlijs.candi.marka)
-	return tavlijs;
-
-	tavlijs.ipodoxiClear();
-	tavlijs.ipodoxiLocate(e);
-
-	let marka = tavlijs.candi.marka;
-	let markaDom = marka.domGet();
-
-	let x0 = tavlijs.candi.markaX0;
-	let y0 = tavlijs.candi.markaY0;
-
-	let dx = e.pageX - x0;
-	let dy = e.pageY - y0;
-
-	let markaLeft = tavlijs.candi.markaLeft0 + dx;
-	let markaTop = tavlijs.candi.markaTop0 + dy;
-
-	markaDom.css({
-		'left': markaLeft + 'px',
-		'top': markaTop + 'px',
-	});
-
 	return tavlijs;
 };
 
 tavlijs.mouseUp = function(e) {
 	e.preventDefault();
 	e.stopPropagation();
-
-	let candi = tavlijs.candi.pouli;
-
-	tavlijs.candiClear();
-
-	if (!tavlijs.ipodoxi)
-	return tavlijs;
-
-	if (!candi)
-	return tavlijs;
-
-	let ipodoxiDom = tavlijs.ipodoxi;
-	let dana = ipodoxiDom.data('stili').dana;
-
-	dana.candiPush(candi);
-
-	tavlijs.ipodoxiClear();
-	return tavlijs;
-};
-
-///////////////////////////////////////////////////////////////////////////////@
-
-tavlijs.ipodoxiLocate = function(e) {
-	let tavli = tavlijs.candi.marka.tavli;
-	let tavliDom = tavli.domGet();
-
-	tavlijs.ipodoxiClear();
-	tavliDom.
-	find('.tavlijsThesi,.tavlijsThiki,.tavlijsExo').
-	each(function() {
-		if (tavlijs.pointOutsideElement(e, $(this)))
-		return true;
-
-		tavlijs.ipodoxiSet($(this));
-		return false;
-	});
-
-	return tavlijs;
-};
-
-tavlijs.ipodoxi = undefined;
-
-tavlijs.ipodoxiSet = function(dom) {
-	tavlijs.ipodoxiClear();
-	tavlijs.ipodoxi = dom.addClass('tavlijsIpodoxi');
-
-	return tavlijs;
-};
-
-tavlijs.ipodoxiClear = function() {
-	if (!tavlijs.ipodoxi)
-	return tavlijs;
-
-	tavlijs.ipodoxi.removeClass('tavlijsIpodoxi');
-	tavlijs.ipodoxi = undefined;
 
 	return tavlijs;
 };

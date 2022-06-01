@@ -13,18 +13,18 @@ tavlijs.init(arenaDom);
 		300,
 		400,
 		450,
-		*/
 		500,
 		700,
-		/*
 		2000,
 		3000,
 		*/
-	].forEach(function(w) {
+600,
+600,
+	].forEach(function(w, i) {
 		t = new tavlijs.tavli();
 		t.platosSet(w);
 
-		t.epomenosSet(Math.floor(Math.random() * 2));
+		t.epomenosSet(i % 2);
 		t.zariaSet();
 
 		if (t.zariGet(0) === t.zariGet(1))
