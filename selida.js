@@ -24,6 +24,18 @@ tavlijs.init(arenaDom);
 		t = new tavlijs.tavli();
 		t.platosSet(w);
 
+		switch (i % 3) {
+		case 0:
+			t.portesSet();
+			break;
+		case 1:
+			t.plakotoSet();
+			break;
+		case 2:
+			t.fevgaSet();
+			break;
+		}
+
 		t.epomenosSet(i % 2);
 		t.zariaSet();
 

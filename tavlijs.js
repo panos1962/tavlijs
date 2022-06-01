@@ -2,6 +2,10 @@
 
 var tavlijs = {};
 
+tavlijs.pexnidiPortes = 'ΠΟΡΤΕΣ';
+tavlijs.pexnidiPlakoto = 'ΠΛΑΚΩΤΟ';
+tavlijs.pexnidiFevga = 'ΦΕΥΓΑ';
+
 tavlijs.platosDefault = 600;
 
 ///////////////////////////////////////////////////////////////////////////////@
@@ -84,6 +88,45 @@ tavlijs.tavli = function() {
 
 	if (!this.hasOwnProperty('kinisi'))
 	this.kinisi = [];
+};
+
+tavlijs.tavli.prototype.portesSet = function() {
+	this.pexnidi = tavlijs.pexnidiPortes;
+	return this;
+};
+
+tavlijs.tavli.prototype.isPortes = function() {
+	return (this.pexnidi === tavlijs.pexnidiPortes);
+};
+
+tavlijs.tavli.prototype.oxiPortes = function() {
+	return !this.isPortes();
+};
+
+tavlijs.tavli.prototype.plakotoSet = function() {
+	this.pexnidi = tavlijs.pexnidiPlakoto;
+	return this;
+};
+
+tavlijs.tavli.prototype.isPlakoto = function() {
+	return (this.pexnidi === tavlijs.pexnidiPlakoto);
+};
+
+tavlijs.tavli.prototype.oxiPlakoto = function() {
+	return !this.isPlakoto();
+};
+
+tavlijs.tavli.prototype.fevgaSet = function() {
+	this.pexnidi = tavlijs.pexnidiFevga;
+	return this;
+};
+
+tavlijs.tavli.prototype.isFevga = function() {
+	return (this.pexnidi === tavlijs.pexnidiFevga);
+};
+
+tavlijs.tavli.prototype.oxiFevga = function() {
+	return !this.isFevga();
 };
 
 tavlijs.tavli.prototype.platosSet = function(platos) {
@@ -754,6 +797,57 @@ tavlijs.oxiMarka = function() {
 	return !tavlijs.isMarka();
 };
 
+///////////////////////////////////////////////////////////////////////////////@
+
+tavlijs.ipodoxi = function(stiliDom) {
+	let ipodoxi = this;
+
+	this.stiliDom = stiliDom;
+	this.stili = stiliDom.data('stili');
+	this.tavli = tavlijs.candi.tavli;
+	this.pektis = this.tavli.epomenos;
+	this.antipalos = (this.pektis ? 0 : 1);
+
+	this.plist = stiliDom.children('.tavlijsPouli');
+
+	this.pcount = [
+		0,
+		0,
+	];
+	this.ptotal = 0;
+
+	this.plist.each(function() {
+		let pouli = $(this).data('pouli');
+		ipodoxi.pcount[pouli.pektis]++;
+		ipodoxi.ptotal++;
+	});
+
+	this.pouliFirst = this.plist.first();
+	this.pouliLast = this.plist.last();
+};
+
+tavlijs.ipodoxi.prototype.isThiki = function() {
+	return (this.stili instanceof tavlijs.thiki);
+};
+
+tavlijs.ipodoxi.prototype.oxiThiki = function() {
+	return !this.isThiki();
+};
+
+tavlijs.ipodoxi.prototype.isThesi = function() {
+	return (this.stili instanceof tavlijs.thesi);
+};
+
+tavlijs.ipodoxi.prototype.oxiThesi = function() {
+	return !this.isThesi();
+};
+
+tavlijs.ipodoxi.prototype.isAdia = function() {
+	return (this.ptotal <= 0);
+};
+
+///////////////////////////////////////////////////////////////////////////////@
+
 tavlijs.ipodoxiSet = function(ipodoxiDom) {
 	tavlijs.ipodoxiClear();
 	tavlijs.candi.ipodoxiDom = ipodoxiDom.addClass('tavlijsIpodoxi');
@@ -783,31 +877,26 @@ tavlijs.oxiIpodoxeas = function(stiliDom) {
 	if (tavlijs.oxiCandi())
 	return true;
 
-	let stili = stiliDom.data('stili');
-	let tavli = tavlijs.candi.tavli;
-	let epomenos = tavli.epomenos;
+	let ipodoxi = new tavlijs.ipodoxi(stiliDom);
 
-	if ((stili instanceof tavlijs.thiki) && (stili.pektis !== epomenos))
+	if (ipodoxi.pouliLast.data('pouli') === tavlijs.candi.pouliDom.data('pouli'))
 	return true;
 
-	let plist = stiliDom.children('.tavlijsPouli');
-
-	if ((stili instanceof tavlijs.thesi) && (plist.length <= 0))
-	return false;
-
-	let antipalos = (epomenos ? 0 : 1);
-	let count = [
-		0,
-		0,
-	];
-
-	plist.each(function() {
-		let pouli = $(this).data('pouli');
-		count[pouli.pektis]++;
-	});
-
-	if ((stili instanceof tavlijs.thesi) && (count[antipalos] > 1))
+	if (ipodoxi.isThiki() && (ipodoxi.stili.pektis !== ipodoxi.pektis))
 	return true;
+
+	if (ipodoxi.isThesi()) {
+		if (ipodoxi.isAdia())
+		return false;
+
+		if (ipodoxi.pouliLast.data('pouli').pektis === ipodoxi.pektis)
+		return false;
+
+		if (ipodoxi.ptotal !== 1)
+		return true;
+
+		return ipodoxi.tavli.oxiPortes();
+	}
 
 	return false;
 };
