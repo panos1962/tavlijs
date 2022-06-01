@@ -18,8 +18,8 @@ tavlijs.init(arenaDom);
 		2000,
 		3000,
 		*/
-600,
-600,
+700,
+700,
 	].forEach(function(w, i) {
 		t = new tavlijs.tavli();
 		t.platosSet(w);
