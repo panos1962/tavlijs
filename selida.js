@@ -1,6 +1,7 @@
 "use strict";
 
 $(function() {
+	tavlijs.pektis = 0;
 	let arenaDom = $('<div>').appendTo($(document.body));
 	let t;
 tavlijs.init(arenaDom);

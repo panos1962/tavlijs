@@ -284,3 +284,8 @@ background-color: yellow;
 .tavlijsIpodoxi {
 	background-color: #6fcf8d;
 }
+
+.tavlijsStiliEpileximi {
+	background-color: magenta;
+	cursor: pointer;
+}

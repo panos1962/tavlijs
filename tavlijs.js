@@ -8,6 +8,99 @@ tavlijs.pexnidiFevga = 'ΦΕΥΓΑ';
 
 tavlijs.platosDefault = 600;
 
+tavlijs.pektis = undefined;
+tavlijs.theatis = undefined;
+
+tavlijs.epomenosCheckOn = true;
+
+///////////////////////////////////////////////////////////////////////////////@
+
+tavlijs.pektisSet = function(pektis) {
+	tavlijs.pektis = undefined;
+	tavlijs.theatis = undefined;
+
+	switch (pektis) {
+	case 0:
+	case 1:
+		tavlijs.pektis = pektis;
+		break;
+	}
+
+	return tavlijs;
+};
+
+tavlijs.isPektis = function() {
+	return (tavlijs.pektis !== undefined);
+};
+
+tavlijs.oxiPektis = function() {
+	return !tavlijs.isPektis();
+};
+
+tavlijs.theatisSet = function(pektis) {
+	tavlijs.pektis = undefined;
+	tavlijs.theatis = undefined;
+
+	switch (pektis) {
+	case 0:
+	case 1:
+		tavlijs.theatis = pektis;
+		break;
+	}
+
+	return tavlijs;
+};
+
+tavlijs.isTheatis = function() {
+	return (tavlijs.theatis === undefined);
+};
+
+tavlijs.oxiTheatis = function() {
+	return !tavlijs.isTheatis();
+};
+
+tavlijs.isThiki = function(stili) {
+	if (stili === undefined)
+	return false;
+
+	if (typeof(stili) !== 'object')
+	return false;
+
+	return (stili instanceof tavlijs.thiki);
+};
+
+tavlijs.oxiThiki = function(stili) {
+	return !tavlijs.isThiki(stili);
+};
+
+tavlijs.isExo = function(stili) {
+	if (stili === undefined)
+	return false;
+
+	if (typeof(stili) !== 'object')
+	return false;
+
+	return (stili instanceof tavlijs.exo);
+};
+
+tavlijs.oxiExo = function(stili) {
+	return !tavlijs.isExo(stili);
+};
+
+tavlijs.isThesi = function(stili) {
+	if (stili === undefined)
+	return false;
+
+	if (typeof(stili) !== 'object')
+	return false;
+
+	return (stili instanceof tavlijs.thesi);
+};
+
+tavlijs.oxiThesi = function(stili) {
+	return !tavlijs.isThesi(stili);
+};
+
 ///////////////////////////////////////////////////////////////////////////////@
 
 // Κάθε τάβλι έχει ένα συνολικό πλάτος στο οποίο, εκτός από το κυρίως ταμπλό
@@ -16,8 +109,6 @@ tavlijs.platosDefault = 600;
 // παίκτη 0, ενώ το επάνω μέρος αφορά στον παίκτη 1. Περιλαμβάνονται ακόμη τα
 // ζάρια και το πλήθος των παιξιών που έχουν παιχτεί και αφορούν σε κάθε
 // συγκεκριμένη ζαριά.
-
-tavlijs.platosDefault = 100;
 
 tavlijs.tavli = function() {
 	let i;
@@ -90,6 +181,8 @@ tavlijs.tavli = function() {
 	this.kinisi = [];
 };
 
+// Ακολουθούν μέθοδοι που αφορούν στο είδος του τρέχοντος παιχνιδιού.
+
 tavlijs.tavli.prototype.portesSet = function() {
 	this.pexnidi = tavlijs.pexnidiPortes;
 	return this;
@@ -155,6 +248,23 @@ tavlijs.tavli.prototype.epomenosSet = function(pektis) {
 
 tavlijs.tavli.prototype.epomenosGet = function() {
 	return this.epomenos;
+};
+
+tavlijs.tavli.prototype.isEpomenos = function(pektis) {
+	if (this.epomenos === undefined)
+	return false;
+
+	if (pektis === undefined)
+	return false;
+
+	if (!tavlijs.epomenosCheckOn)
+	return true;
+
+	return (pektis === this.epomenos);
+};
+
+tavlijs.tavli.prototype.oxiEpomenos = function(pektis) {
+	return !this.isEpomenos(pektis);
 };
 
 tavlijs.tavli.prototype.zariaSet = function(zari1, zari2) {
@@ -605,6 +715,51 @@ tavlijs.zari.prototype.dom = function() {
 
 ///////////////////////////////////////////////////////////////////////////////@
 
+tavlijs.epileximiCheck = function(e, stiliDom) {
+	e.preventDefault();
+	e.stopPropagation();
+
+	if (tavlijs.oxiPektis())
+	return tavlijs;
+
+	let stili = stiliDom.data('stili');
+
+	if (!stili)
+	return tavlijs;
+
+	if (stili.dana.countGet() <= 0)
+	return tavlijs;
+
+	let tavli = stili.tavli;
+
+	if (!tavli)
+	return tavlijs;
+
+	if (tavli.oxiEpomenos(tavlijs.pektis))
+	return tavlijs;
+
+	let epomenos = tavli.epomenos;
+
+console.log(epomenos);
+	if (tavli.exo[epomenos].dana.countGet() > 0) {
+		if (!(stili instanceof tavlijs.exo))
+		return tavlijs;
+
+		if (stili.pektis !== tavlijs.pektis)
+		return tavlijs;
+
+		stiliDom.addClass('stiliEpileximo')
+	}
+
+	if (tavlijs.isThiki(stili) && (stili.pektis !== tavlijs.pektis))
+	return tavlijs;
+
+	if (tavlijs.isExo(stili) && (stili.pektis !== tavlijs.pektis))
+	return tavlijs;
+};
+
+///////////////////////////////////////////////////////////////////////////////@
+
 // Με τον όρο "candi" εννοούμε το υποψήφιο προς παίξιμο πούλι. Αυτό μπορεί να
 // είναι ένα πούλι από τη θήκη του παίκτη, ή ένα πούλι από κάποια θέση του
 // board, ή ακόμη και ένα χτυπημένο πούλι του παίκτη. Ωστόσο, ως "candi"
@@ -641,7 +796,7 @@ tavlijs.candi = {
 
 // Η function "candiSet" καλείται on mousedown σε στήλες (θήκες, έξω και
 // θέσεις). Σκοπός της function είναι να θέσει το υποψήφιο προς παίξιμο
-// πούλι το οποίο είναι το τελευταίο πούλι της στήλης. Γενικά το υπο
+// πούλι το οποίο είναι το τελευταίο πούλι της στήλης.
 
 tavlijs.candiSet = function(e, dom) {
 	e.preventDefault();
@@ -651,9 +806,9 @@ tavlijs.candiSet = function(e, dom) {
 
 	tavlijs.candiClear();
 
-	// Το dom element αφορά σε κάποια στήλη (θήκη, έχξ ή θέση). Η στήλη
-	// μπορεί να έχει ή να μην έχει πούλια. Όπως και να έχει, δημιουργούμε
-	// λίστα με τα dom elements των πουλιών της στήλης.
+	// Το dom element αφορά σε κάποια στήλη (θήκη, έξω ή θέση). Η στήλη
+	// μπορεί να έχει ή να μην έχει πούλια. Σε κάθε περίπτωση, πάντως,
+	// δημιουργούμε λίστα με τα dom elements των πουλιών της στήλης.
 
 	let plist = dom.children('.tavlijsPouli');
 
@@ -827,7 +982,7 @@ tavlijs.ipodoxi = function(stiliDom) {
 };
 
 tavlijs.ipodoxi.prototype.isThiki = function() {
-	return (this.stili instanceof tavlijs.thiki);
+	return tavlijs.isThiki(this.stili);
 };
 
 tavlijs.ipodoxi.prototype.oxiThiki = function() {
@@ -835,7 +990,7 @@ tavlijs.ipodoxi.prototype.oxiThiki = function() {
 };
 
 tavlijs.ipodoxi.prototype.isThesi = function() {
-	return (this.stili instanceof tavlijs.thesi);
+	return tavlijs.isThesi(this.stili);
 };
 
 tavlijs.ipodoxi.prototype.oxiThesi = function() {
@@ -936,6 +1091,9 @@ tavlijs.init = function(arena) {
 
 	arena.
 	addClass('tavlijsArena').
+	on('mouseenter', '.tavlijsThiki,.tavlijsThesi,.tavlijsExo', function(e) {
+		tavlijs.epileximiCheck(e, $(this));
+	}).
 	on('mousedown', '.tavlijsThiki,.tavlijsThesi,.tavlijsExo', function(e) {
 		tavlijs.candiSet(e, $(this));
 	});
