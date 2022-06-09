@@ -707,7 +707,7 @@ tavlijs.zari.prototype.dom = function() {
 	let dom = $('<img>').
 	data('zari', this).
 	addClass('tavlijsZari').
-	attr('src', 'ikona/' + this.face + '.png').
+	attr('src', 'ikona/zari/' + this.face + '.png').
 	addClass('tavlijsZari');
 
 	return dom;
