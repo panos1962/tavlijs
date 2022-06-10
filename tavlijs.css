@@ -210,27 +210,27 @@ background-color: cyan;
 }
 
 .tavlijsPouliKermaExo0 {
-	fill: #6e5a33;
-}
-
-.tavlijsPouliKermaExo1 {
 	fill: #153a00;
 }
 
-.tavlijsPouliKermaMesi0 {
-	fill: #c5bb8e;
+.tavlijsPouliKermaExo1 {
+	fill: #6e5a33;
 }
 
-.tavlijsPouliKermaMesi1 {
+.tavlijsPouliKermaMesi0 {
 	fill: #506642;
 }
 
+.tavlijsPouliKermaMesi1 {
+	fill: #c5bb8e;
+}
+
 .tavlijsPouliKermaEso0 {
-	fill: #ffffe0;
+	fill: #314c29;
 }
 
 .tavlijsPouliKermaEso1 {
-	fill: #314c29;
+	fill: #ffffe0;
 }
 
 .tavlijsPouliPlaka {
@@ -242,27 +242,27 @@ background-color: yellow;
 }
 
 .tavlijsPouliPlakaExo0 {
-	fill: #7c7856;
-}
-
-.tavlijsPouliPlakaExo1 {
 	fill: #072e16;
 }
 
-.tavlijsPouliPlakaEso0 {
-	fill: #F5F5DC;
+.tavlijsPouliPlakaExo1 {
+	fill: #7c7856;
 }
 
-.tavlijsPouliPlakaEso1 {
+.tavlijsPouliPlakaEso0 {
 	fill: #305e33;
 }
 
+.tavlijsPouliPlakaEso1 {
+	fill: #F5F5DC;
+}
+
 .tavlijsPouliCandi0 {
-	fill: #ff4d00;
+	fill: #00b2ff;
 }
 
 .tavlijsPouliCandi1 {
-	fill: #00b2ff;
+	fill: #ff4d00;
 }
 
 .tavlijsMarka {

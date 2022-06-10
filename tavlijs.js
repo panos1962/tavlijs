@@ -525,7 +525,15 @@ tavlijs.thesi.prototype.pouliPush = function(pouli) {
 
 tavlijs.thesi.prototype.dom = function() {
 	let w = (this.tavli.platos - 8) * 0.064292;
+
+	if (w < 0)
+	w = 0;
+
 	let h = (this.tavli.platos - 4) * 0.3975;
+
+	if (h < 0)
+	h = 0;
+
 	let x = (this.id % 6) * w;
 
 	let dom = $('<div>').
@@ -538,6 +546,9 @@ tavlijs.thesi.prototype.dom = function() {
 	});
 
 	w = (this.tavli.platos - 8) * 0.0625;
+
+	if (w < 0)
+	w = 0;
 
 	$('<svg width="' + w + '" height="' + h + '">' +
 	'<polygon class="tavlijsThesiTrigono' + (this.id % 2) + '" ' +
@@ -636,6 +647,10 @@ tavlijs.pouli = function(tavli, pektis) {
 
 tavlijs.pouli.prototype.kermaDom = function() {
 	let w = (this.tavli.platos - 8) * 0.06428;
+
+	if (w < 0)
+	w = 0;
+
 	let r = w / 2;
 	let rexo = r * 0.985;
 	let rmesi = r * 0.96;
@@ -659,7 +674,11 @@ tavlijs.pouli.prototype.kermaDom = function() {
 };
 
 tavlijs.pouli.prototype.plakaDom = function() {
-	let w = this.tavli.platos * 0.062;
+	let w = (this.tavli.platos - 8) * 0.062;
+
+	if (w < 0)
+	w = 0;
+
 	let h = w * 0.32;
 
 	let wexo = w * 0.99;
@@ -669,7 +688,14 @@ tavlijs.pouli.prototype.plakaDom = function() {
 	let heso = hexo * 0.75;
 
 	let dw = (wexo - weso) / 2;
+
+	if (dw < 0)
+	dw = 0;
+
 	let dh = (hexo - heso) / 2;
+
+	if (dh < 0)
+	dh = 0;
 
 	let rexo = hexo * 0.2;
 	let reso = heso * 0.10;
