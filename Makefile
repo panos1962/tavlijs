@@ -1,3 +1,8 @@
+JSMINFILES = tavlijs.min.js
+
+%.min.js : %.js
+	uglifyjs --verbose --output $@ $<
+
 status:
 	git status
 
@@ -15,6 +20,11 @@ commit:
 
 push:
 	git push
+
+min: $(JSMINFILES)
+
+cleanup:
+	@rm -f $(JSMINFILES)
 
 test:
 	@#database/ddload.sh -L
