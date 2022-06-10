@@ -524,7 +524,7 @@ tavlijs.thesi.prototype.pouliPush = function(pouli) {
 };
 
 tavlijs.thesi.prototype.dom = function() {
-	let w = this.tavli.platos * 0.0644;
+	let w = this.tavli.platos * 0.06415;
 	let h = this.tavli.platos * 0.3975;
 	let x = (this.id % 6) * w;
 
@@ -635,7 +635,7 @@ tavlijs.pouli = function(tavli, pektis) {
 };
 
 tavlijs.pouli.prototype.kermaDom = function() {
-	let w = this.tavli.platos * 0.0644;
+	let w = this.tavli.platos * 0.06415;
 	let r = w / 2;
 	let rexo = r * 0.985;
 	let rmesi = r * 0.96;

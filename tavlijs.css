@@ -79,9 +79,14 @@ background-color: #919ba7;
 
 .tavlijsMisoArea {
 	position: absolute;
-	width: 42%;
-	height: 100%;
+	width: calc(42% - 2px);
+	height: calc(100% - 2px);
 	background-color: #853D25;
+background-image: url("ikona/background/korniza.jpg");
+background-repeat: repeat;
+border-style: solid;
+border-width: 1px;
+border-color: #3e0d0d;
 }
 
 .tavlijsMisoArea0 {
@@ -99,6 +104,8 @@ background-color: #919ba7;
 	width: 92%;
 	height: 96%;
 	background-color: #ffe9b8;
+background-image: url("ikona/background/board.jpg");
+background-repeat: repeat;
 }
 
 /******************************************************************************/
@@ -181,11 +188,11 @@ background-color: red;
 }
 
 .tavlijsThesiTrigono0 {
-	fill: #d5a76b;
+	fill: #d5b994;
 }
 
 .tavlijsThesiTrigono1 {
-	fill: #df9d5c;
+	fill: #d59f6a;
 }
 
 /******************************************************************************/
@@ -204,7 +211,7 @@ background-color: cyan;
 }
 
 .tavlijsPouliKermaExo1 {
-	fill: #637c55;
+	fill: #153a00;
 }
 
 .tavlijsPouliKermaMesi0 {
@@ -212,7 +219,7 @@ background-color: cyan;
 }
 
 .tavlijsPouliKermaMesi1 {
-	fill: #254c0a;
+	fill: #506642;
 }
 
 .tavlijsPouliKermaEso0 {
@@ -244,7 +251,7 @@ background-color: yellow;
 }
 
 .tavlijsPouliPlakaEso1 {
-	fill: #2a5039;
+	fill: #305e33;
 }
 
 .tavlijsPouliCandi0 {
