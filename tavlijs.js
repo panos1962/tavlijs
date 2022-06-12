@@ -304,7 +304,7 @@ tavlijs.tavli.prototype.dom = function() {
 	addClass('tavlijsTavli').
 	css({
 		"width": this.platos + 'px',
-		"height": (this.platos * 0.9) + 'px'
+		"height": (this.platos * 0.8) + 'px'
 	});
 
 	// Εκκινούμε με τις «θήκες» στην αριστερή πλευρά.
@@ -529,7 +529,7 @@ tavlijs.thesi.prototype.dom = function() {
 	if (w < 0)
 	w = 0;
 
-	let h = (this.tavli.platos - 4) * 0.3975;
+	let h = (this.tavli.platos - 4) * 0.345;
 
 	if (h < 0)
 	h = 0;
@@ -563,13 +563,16 @@ tavlijs.thesi.prototype.dom = function() {
 	let count = this.dana.countGet();
 
 	if (count > 15) { dh2 = dh1 / 6; orio = 3; }
-	else if (count > 13) { dh2 = dh1 / 3.72; orio = 2; }
-	else if (count > 12) { dh2 = dh1 / 3.3; orio = 2; }
-	else if (count > 10) { dh2 = dh1 / 2.82; orio = 2; }
-	else if (count > 9) { dh2 = dh1 / 2.2; orio = 2; }
-	else if (count > 8) { dh2 = dh1 / 2.0; orio = 2; }
-	else if (count > 7) { dh2 = dh1 / 1.9; orio = 3; }
-	else if (count > 6) { dh2 = dh1 / 2.15; orio = 4; }
+	else if (count > 14) { dh2 = dh1 / 3.95; orio = 1; }
+	else if (count > 13) { dh2 = dh1 / 3.65; orio = 1; }
+	else if (count > 12) { dh2 = dh1 / 4.35; orio = 2; }
+	else if (count > 11) { dh2 = dh1 / 3.88; orio = 2; }
+	else if (count > 10) { dh2 = dh1 / 3.50; orio = 2; }
+	else if (count > 9) { dh2 = dh1 / 3.0; orio = 2; }
+	else if (count > 8) { dh2 = dh1 / 2.62; orio = 2; }
+	else if (count > 7) { dh2 = dh1 / 3.00; orio = 3; }
+	else if (count > 6) { dh2 = dh1 / 2.25; orio = 3; }
+	else if (count > 5) { dh2 = dh1 / 1.50; orio = 3; }
 
 	let n = 0;
 	this.pouliWalk(function(pouli) {
