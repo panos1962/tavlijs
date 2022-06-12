@@ -552,7 +552,7 @@ tavlijs.thesi.prototype.dom = function() {
 
 	$('<svg width="' + w + '" height="' + h + '">' +
 	'<polygon class="tavlijsThesiTrigono' + (this.id % 2) + '" ' +
-	'points="0,' + h + ' ' + (w / 2) + ',0' + ' ' + w + ',' + h + '"/>').
+	'points="0,' + h + ' ' + (w / 2) + ',' + (h * 0.1) + ' ' + w + ',' + h + '"/>').
 	appendTo(dom);
 
 	let b = 0;
