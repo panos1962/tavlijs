@@ -1,4 +1,4 @@
-JSMINFILES = tavlijs.min.js
+JSMINFILES = tavlijsCore.min.js tavlijs.min.js
 
 %.min.js : %.js
 	uglifyjs --verbose --output $@ $<
