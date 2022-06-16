@@ -1,6 +1,10 @@
 "use strict";
 
-tavlijs = {};
+try {
+	window.tavlijs = {};
+} catch (e) {
+	global.tavlijs = {};
+}
 
 tavlijs.pexnidiPortes = 'ΠΟΡΤΕΣ';
 tavlijs.pexnidiPlakoto = 'ΠΛΑΚΩΤΟ';

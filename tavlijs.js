@@ -1,7 +1,5 @@
 "use strict";
 
-var tavlijs = {};
-
 tavlijs.pexnidiPortes = 'ΠΟΡΤΕΣ';
 tavlijs.pexnidiPlakoto = 'ΠΛΑΚΩΤΟ';
 tavlijs.pexnidiFevga = 'ΦΕΥΓΑ';
