@@ -1,9 +1,5 @@
 "use strict";
 
-tavlijs.pexnidiPortes = 'ΠΟΡΤΕΣ';
-tavlijs.pexnidiPlakoto = 'ΠΛΑΚΩΤΟ';
-tavlijs.pexnidiFevga = 'ΦΕΥΓΑ';
-
 tavlijs.platosDefault = 600;
 
 tavlijs.pektis = undefined;
